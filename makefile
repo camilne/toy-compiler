@@ -1,20 +1,24 @@
-all:
-	$(MAKE) grammar
-	$(MAKE) lex
-	$(MAKE) compile
+CXX				:= g++
+CXXFLAGS		:= -std=c++11 -g3
 
-lex:
+GENERATED_FILES := grammar.tab.c grammar.tab.h lex.yy.c
+SOURCE_FILES	:= $(GENERATED_FILES) main.cpp
+EXECUTABLE		:= compiler
+
+all: compiler
+
+lex.yy.c: lex.l grammar.tab.h
 	flex lex.l
 
-grammar:
+grammar.tab.c grammar.tab.h: grammar.y
 	bison -d grammar.y
 
-compile:
-	g++ -c grammar.tab.c
-	g++ -c lex.yy.c
-	g++ -c main.cpp
-	g++ -std=c++11 -g3 grammar.tab.o lex.yy.o main.o -o compiler
+compiler: $(SOURCE_FILES)
+	$(CXX) $(CXXFLAGS) -o $(EXECUTABLE) $(SOURCE_FILES)
+
+clean:
+	rm $(EXECUTABLE) $(GENERATED_FILES) 
 
 run:
-	$(MAKE) all
-	./compiler < test/test.code
+	@$(MAKE) all -s
+	@./$(EXECUTABLE) < test/test.code
