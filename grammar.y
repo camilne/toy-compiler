@@ -15,7 +15,12 @@ void yyerror(char const*);
 
 %token <STRING> IDENTIFIER
 %token <INT> INTEGER
-%token SEMICOLON OP_PLUS OP_MINUS;
+%token SEMICOLON
+
+%type <INT> statement
+%type <INT> expression
+
+%left OP_PLUS OP_MINUS
 
 %%
 
@@ -24,10 +29,13 @@ statements:
     | %empty
 
 statement:
-    expression SEMICOLON                        {}
+    expression SEMICOLON                        { std::cout << "Expression value: " << $1 << std::endl; }
 
 expression:
-    IDENTIFIER                                  { std::cout << "Identifier: " << $1 << std::endl; }
+      expression OP_PLUS expression             { $$ = $1 + $3; }
+    | expression OP_MINUS expression            { $$ = $1 - $3; }
+    | IDENTIFIER                                { std::cout << "Identifier: " << $1 << std::endl; }
+    | INTEGER                                   { std::cout << "Integer: " << $1 << std::endl; }
 
 %%
 
