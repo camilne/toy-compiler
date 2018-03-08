@@ -1,6 +1,7 @@
 #include <iostream>
 #include "../generated/grammar.tab.h"
-#include "SyntaxTree.ih"
+#include "SyntaxTree.hpp"
+#include "CodeGenerator.hpp"
 
 extern int yylex();
 extern SyntaxTree* ast;
@@ -21,7 +22,10 @@ int main() {
         std::cout << "This input is valid." << std::endl;
 
     std::cout << std::endl << "--- code ---" << std::endl;
-    std::cout << ast->toCode() << std::endl;
+
+    CodeGenerator generator(ast);
+
+    std::cout << generator.generate() << std::endl;
 
     return result;
 #endif
