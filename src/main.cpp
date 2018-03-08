@@ -1,5 +1,5 @@
 #include <iostream>
-#include "grammar.tab.h"
+#include "../generated/grammar.tab.h"
 #include "SyntaxTree.ih"
 
 extern int yylex();
