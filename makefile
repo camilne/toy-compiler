@@ -11,7 +11,7 @@ BISON_SOURCE	:= grammar.y
 BISON_GENERATED := grammar.tab.c grammar.tab.h
 
 GENERATED_FILES := $(FLEX_GENERATED) $(BISON_GENERATED)
-SOURCE_FILES	:= $(GENERATED_FILES) main.cpp
+SOURCE_FILES	:= $(GENERATED_FILES) *.hpp *.cpp
 EXECUTABLE		:= compiler
 
 

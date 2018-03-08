@@ -1,41 +1,56 @@
+%code requires{
+#include "SyntaxTree.ih"
+}
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <iostream>
+#include "SyntaxTree.ih"
 
 int yylex(void);
 void yyerror(char const*);
+extern char* yytext;
+
+SyntaxTree* ast;
 %}
 
 %union {
-    int             INT;
-    const char*     STRING;
+    int                                 INT;
+    const char*                         STRING;
+    class SyntaxTree::SyntaxTreeNode*   NODE;
 }
+
+%type <NODE> statements
+%type <NODE> statement
+%type <NODE> expression
 
 %token <STRING> IDENTIFIER
 %token <INT> INTEGER
 %token SEMICOLON
 
-%type <INT> statement
-%type <INT> expression
-
 %left OP_PLUS OP_MINUS
+
+%start init
 
 %%
 
+init:
+    statements statement                        { ast = new SyntaxTree(new StatementsNode($1, $2)); }
+
 statements:
-    statements statement                        {}
-    | %empty
+    statements statement                        { $$ = new StatementsNode($1, $2); }
+    | %empty                                    { $$ = nullptr; }
 
 statement:
-    expression SEMICOLON                        { std::cout << "Expression value: " << $1 << std::endl; }
+    expression SEMICOLON                        { $$ = $1; }
 
 expression:
-      expression OP_PLUS expression             { $$ = $1 + $3; }
-    | expression OP_MINUS expression            { $$ = $1 - $3; }
-    | IDENTIFIER                                { std::cout << "Identifier: " << $1 << std::endl; }
-    | INTEGER                                   { std::cout << "Integer: " << $1 << std::endl; }
+      expression OP_PLUS expression             { $$ = new OpPlusNode($1, $3); }
+    | expression OP_MINUS expression            { $$ = new OpMinusNode($1, $3); }
+    | IDENTIFIER                                { $$ = new IdentifierNode($1); }
+    | INTEGER                                   { $$ = new IntegerNode($1); }
 
 %%
 

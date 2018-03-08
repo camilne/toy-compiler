@@ -1,7 +1,9 @@
 #include <iostream>
 #include "grammar.tab.h"
+#include "SyntaxTree.ih"
 
 extern int yylex();
+extern SyntaxTree* ast;
 
 //#define LEXER_OUTPUT
 
@@ -17,6 +19,10 @@ int main() {
         std::cout << "This input is invalid." << std::endl;
     else
         std::cout << "This input is valid." << std::endl;
+
+    std::cout << std::endl << "--- code ---" << std::endl;
+    std::cout << ast->toCode() << std::endl;
+
     return result;
 #endif
 }
