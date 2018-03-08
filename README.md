@@ -8,6 +8,11 @@ This is a toy compiler that I am working on. It is written in C++. It uses the f
 
 The goal of this project is to turn a toy C-like language into MIPS assembly, which will then be assembled (with an assembler written by me) into machine code. This machine code can then run on a virtual machine (also created by me). It is an exercise for me to learn about compilers and computer architecture.
 
+Compilation
+-----------
+
+To build the project, make sure you have the libraries installed then run `make`. This will generate an executable called *compiler*. This accepts a program through `stdin`.
+
 Testing
 -------
 
