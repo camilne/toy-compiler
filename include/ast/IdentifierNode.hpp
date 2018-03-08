@@ -1,7 +1,7 @@
 #ifndef IDENTIFIER_NODE_HPP
 #define IDENTIFIER_NODE_HPP
 
-#include "SyntaxTree.hpp"
+#include "ast/SyntaxTree.hpp"
 
 class IdentifierNode : public SyntaxTree::SyntaxTreeNode {
 public:

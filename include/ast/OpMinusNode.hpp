@@ -1,7 +1,7 @@
 #ifndef OP_MINUS_NODE
 #define OP_MINUS_NODE
 
-#include "SyntaxTree.hpp"
+#include "ast/SyntaxTree.hpp"
 
 class OpMinusNode : public SyntaxTree::SyntaxTreeNode {
 public:

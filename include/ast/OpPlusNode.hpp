@@ -1,7 +1,7 @@
 #ifndef OP_PLUS_NODE
 #define OP_PLUS_NODE
 
-#include "SyntaxTree.hpp"
+#include "ast/SyntaxTree.hpp"
 
 class OpPlusNode : public SyntaxTree::SyntaxTreeNode {
 public:

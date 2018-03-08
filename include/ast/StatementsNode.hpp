@@ -1,7 +1,7 @@
 #ifndef STATEMENTS_NODE_HPP
 #define STATEMENTS_NODE_HPP
 
-#include "SyntaxTree.hpp"
+#include "ast/SyntaxTree.hpp"
 
 class StatementsNode : public SyntaxTree::SyntaxTreeNode {
 public:

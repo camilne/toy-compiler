@@ -1,7 +1,7 @@
 #ifndef INTEGER_NODE_HPP
 #define INTEGER_NODE_HPP
 
-#include "SyntaxTree.hpp"
+#include "ast/SyntaxTree.hpp"
 
 class IntegerNode : public SyntaxTree::SyntaxTreeNode {
 public:

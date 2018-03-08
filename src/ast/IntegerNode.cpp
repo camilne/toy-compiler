@@ -1,4 +1,4 @@
-#include "IntegerNode.hpp"
+#include "ast/IntegerNode.hpp"
 #include <string>
 
 std::string IntegerNode::toCode() const {

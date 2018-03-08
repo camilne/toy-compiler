@@ -1,5 +1,5 @@
 %code requires{
-#include "SyntaxTree.ih"
+#include "ast/SyntaxTree.ih"
 }
 
 %{
@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 #include <iostream>
-#include "SyntaxTree.ih"
+#include "ast/SyntaxTree.ih"
 
 int yylex(void);
 void yyerror(char const*);

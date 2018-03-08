@@ -1,7 +1,7 @@
 #ifndef CODE_GENERATOR_HPP
 #define CODE_GENERATOR_HPP
 
-#include "SyntaxTree.ih"
+#include "ast/SyntaxTree.ih"
 
 class CodeGenerator {
 public:

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "../generated/grammar.tab.h"
-#include "SyntaxTree.hpp"
-#include "CodeGenerator.hpp"
+#include "ast/SyntaxTree.hpp"
+#include "generator/CodeGenerator.hpp"
 
 extern int yylex();
 extern SyntaxTree* ast;
