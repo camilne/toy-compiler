@@ -4,6 +4,7 @@
 #include <string>
 
 class IdentifierNode;
+class InitNode;
 class IntegerNode;
 class OpMinusNode;
 class OpPlusNode;
@@ -12,6 +13,7 @@ class StatementsNode;
 class IGenerator {
 public:
     virtual void generate(IdentifierNode& node) = 0;
+    virtual void generate(InitNode&       node) = 0;
     virtual void generate(IntegerNode&    node) = 0;
     virtual void generate(OpMinusNode&    node) = 0;
     virtual void generate(OpPlusNode&     node) = 0;

@@ -37,7 +37,7 @@ SyntaxTree* ast;
 %%
 
 init:
-    statements statement                        { ast = new SyntaxTree(new StatementsNode($1, $2)); }
+    statements                                  { ast = new SyntaxTree(new InitNode($1)); }
 
 statements:
     statements statement                        { $$ = new StatementsNode($1, $2); }
