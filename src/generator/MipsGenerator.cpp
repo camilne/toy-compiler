@@ -18,9 +18,8 @@ void MipsGenerator::generate(InitNode& node) {
 }
 
 void MipsGenerator::generate(IntegerNode& node) {
-    // TODO: better register allocation. bounds checks.
-    // TODO: push registers to stack if full
-    code += MipsUtil::loadImmediate("$t" + std::to_string(tmpRegCounter++), node.getValue());
+    // TODO: better register allocation.
+    code += MipsUtil::loadImmediate(getTmp(nextTmp()), node.getValue());
 }
 
 void MipsGenerator::generate(OpMinusNode& node) {
@@ -29,10 +28,10 @@ void MipsGenerator::generate(OpMinusNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    code += MipsUtil::sub("$t" + std::to_string(tmpRegCounter-2),
-                          "$t" + std::to_string(tmpRegCounter-2),
-                          "$t" + std::to_string(tmpRegCounter-1));
-    tmpRegCounter--;
+    code += MipsUtil::sub(getTmpOffset(-2),
+                          getTmpOffset(-2),
+                          getTmpOffset(-1));
+    previousTmp();
 }
 
 void MipsGenerator::generate(OpPlusNode& node) {
@@ -41,10 +40,10 @@ void MipsGenerator::generate(OpPlusNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    code += MipsUtil::add("$t" + std::to_string(tmpRegCounter-2),
-                          "$t" + std::to_string(tmpRegCounter-2),
-                          "$t" + std::to_string(tmpRegCounter-1));
-    tmpRegCounter--;
+    code += MipsUtil::add(getTmpOffset(-2),
+                          getTmpOffset(-2),
+                          getTmpOffset(-1));
+    previousTmp();
 }
 
 void MipsGenerator::generate(StatementsNode& node) {
@@ -55,4 +54,37 @@ void MipsGenerator::generate(StatementsNode& node) {
         node.getStatement()->accept(*this);
         //code += MipsUtil::popFrame();
     }
+}
+
+std::string MipsGenerator::getTmp(int val) {
+    if(val < 0 || val > 3)
+        return "INVALID(" + std::to_string(val) + ")";
+    return "$t" + std::to_string(val);
+}
+
+std::string MipsGenerator::getTmpOffset(int off) {
+    if(tmpRegCounter + off >= 0 && tmpRegCounter + off <= 3)
+        return getTmp(tmpRegCounter + off);
+
+    if(off >= -3)
+        return getTmp(tmpRegCounter + off + 4);
+
+    // Fix to pop off stack
+    return getTmp(55);
+}
+
+int MipsGenerator::previousTmp() {
+    if(--tmpRegCounter < 0) {
+        code += MipsUtil::pop(getTmp(tmpRegCounter + 1));
+        tmpRegCounter = 3;
+    }
+    return tmpRegCounter;
+}
+
+int MipsGenerator::nextTmp() {
+    if(++tmpRegCounter > 3) {
+        code += MipsUtil::push(getTmp(tmpRegCounter - 1));
+        tmpRegCounter = 0;
+    }
+    return tmpRegCounter;
 }

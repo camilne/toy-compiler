@@ -16,6 +16,9 @@ public:
     static std::string loadImmediate(std::string reg, word imm);
     static std::string add(std::string rd, std::string rs, std::string rt);
     static std::string sub(std::string rd, std::string rs, std::string rt);
+    static std::string toHex(word val);
+    static std::string push(std::string reg);
+    static std::string pop(std::string reg);
 };
 
 #endif

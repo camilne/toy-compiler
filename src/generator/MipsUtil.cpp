@@ -1,4 +1,6 @@
 #include "generator/MipsUtil.hpp"
+#include <iostream>
+#include <sstream>
 
 // static
 std::string MipsUtil::newFrame() {
@@ -43,4 +45,27 @@ std::string MipsUtil::add(std::string rd, std::string rs, std::string rt) {
 // static
 std::string MipsUtil::sub(std::string rd, std::string rs, std::string rt) {
     return "sub " + rd + " " + rs + " " + rt + "\n";
+}
+
+// static
+std::string MipsUtil::toHex(word val) {
+    std::stringstream ss;
+    ss << std::hex << val;
+    return ss.str();
+}
+
+// static
+std::string MipsUtil::push(std::string reg) {
+    std::string code;
+    code += "addi $sp $sp -4\n";
+    code += "sw " + reg + " 0($sp)\n";
+    return code;
+}
+
+// static
+std::string MipsUtil::pop(std::string reg) {
+    std::string code;
+    code += "lw " + reg + " 0($sp)\n";
+    code += "addi $sp $sp 4\n";
+    return code;
 }

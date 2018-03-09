@@ -18,6 +18,11 @@ public:
 
 private:
     int tmpRegCounter;
+
+    std::string getTmp(int val);
+    std::string getTmpOffset(int off);
+    int previousTmp();
+    int nextTmp();
 };
 
 #endif
