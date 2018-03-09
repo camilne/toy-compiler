@@ -18,15 +18,12 @@ int main() {
     int result = yyparse();
     if(result)
         std::cout << "This input is invalid." << std::endl;
-    else
-        std::cout << "This input is valid." << std::endl;
+    else {
+        MipsGenerator generator;
+        ast->accept(generator);
 
-    std::cout << std::endl << "--- code ---" << std::endl;
-
-    MipsGenerator generator;
-    ast->accept(generator);
-
-    std::cout << generator.getCode() << std::endl;
+        std::cout << generator.getCode() << std::endl;
+    }
 
     return result;
 #endif
