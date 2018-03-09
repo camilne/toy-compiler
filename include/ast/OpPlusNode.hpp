@@ -1,19 +1,30 @@
 #ifndef OP_PLUS_NODE
 #define OP_PLUS_NODE
 
-#include "ast/SyntaxTree.hpp"
+#include "ast/SyntaxTreeNode.hpp"
+#include "generator/IGenerator.hpp"
 
-class OpPlusNode : public SyntaxTree::SyntaxTreeNode {
+class OpPlusNode : public SyntaxTreeNode {
 public:
-    OpPlusNode(SyntaxTree::SyntaxTreeNode* leftExp, SyntaxTree::SyntaxTreeNode* rightExp)
+    OpPlusNode(SyntaxTreeNode* leftExp, SyntaxTreeNode* rightExp)
         : leftExp(leftExp), rightExp(rightExp)
     {}
 
-    std::string toCode() const;
+    virtual void accept(IGenerator& generator) {
+        generator.generate(*this);
+    }
+
+    SyntaxTreeNode* getLeftExp() const {
+        return leftExp;
+    }
+
+    SyntaxTreeNode* getRightExp() const {
+        return rightExp;
+    }
 
 private:
-    SyntaxTree::SyntaxTreeNode* leftExp;
-    SyntaxTree::SyntaxTreeNode* rightExp;
+    SyntaxTreeNode* leftExp;
+    SyntaxTreeNode* rightExp;
 };
 
 #endif

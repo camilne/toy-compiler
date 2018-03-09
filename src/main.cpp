@@ -1,7 +1,7 @@
 #include <iostream>
 #include "../generated/grammar.tab.h"
 #include "ast/SyntaxTree.hpp"
-#include "generator/CodeGenerator.hpp"
+#include "generator/MipsGenerator.hpp"
 
 extern int yylex();
 extern SyntaxTree* ast;
@@ -23,9 +23,10 @@ int main() {
 
     std::cout << std::endl << "--- code ---" << std::endl;
 
-    CodeGenerator generator(ast);
+    MipsGenerator generator;
+    ast->accept(generator);
 
-    std::cout << generator.generate() << std::endl;
+    std::cout << generator.getCode() << std::endl;
 
     return result;
 #endif

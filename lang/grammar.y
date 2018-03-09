@@ -19,7 +19,7 @@ SyntaxTree* ast;
 %union {
     int                                 INT;
     const char*                         STRING;
-    class SyntaxTree::SyntaxTreeNode*   NODE;
+    class SyntaxTreeNode*   NODE;
 }
 
 %type <NODE> statements
