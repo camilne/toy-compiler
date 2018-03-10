@@ -14,6 +14,7 @@ public:
     virtual void generate(IntegerNode&    node) override;
     virtual void generate(OpMinusNode&    node) override;
     virtual void generate(OpPlusNode&     node) override;
+    virtual void generate(PrintNode&      node) override;
     virtual void generate(StatementsNode& node) override;
 
 private:

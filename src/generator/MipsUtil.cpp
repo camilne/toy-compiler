@@ -71,6 +71,11 @@ std::string MipsUtil::pop(std::string reg) {
 }
 
 // static
+std::string MipsUtil::copy(std::string dest, std::string src) {
+    return add(dest, src, "$zero");
+}
+
+// static
 std::string MipsUtil::comment(std::string message) {
     return "# " + message + "\n";
 }

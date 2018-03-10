@@ -28,7 +28,7 @@ SyntaxTree* ast;
 
 %token <STRING> IDENTIFIER
 %token <INT> INTEGER
-%token SEMICOLON
+%token SEMICOLON PRINT_KEYWORD
 
 %left OP_PLUS OP_MINUS
 
@@ -44,7 +44,8 @@ statements:
     | %empty                                    { $$ = nullptr; }
 
 statement:
-    expression SEMICOLON                        { $$ = $1; }
+    PRINT_KEYWORD expression SEMICOLON          { $$ = new PrintNode($2); }
+    | expression SEMICOLON                      { $$ = $1; }
 
 expression:
       expression OP_PLUS expression             { $$ = new OpPlusNode($1, $3); }

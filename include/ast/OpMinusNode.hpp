@@ -1,5 +1,5 @@
-#ifndef OP_MINUS_NODE
-#define OP_MINUS_NODE
+#ifndef OP_MINUS_NODE_HPP
+#define OP_MINUS_NODE_HPP
 
 #include "ast/SyntaxTreeNode.hpp"
 #include "generator/IGenerator.hpp"

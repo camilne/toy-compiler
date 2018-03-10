@@ -1,5 +1,5 @@
-#ifndef OP_PLUS_NODE
-#define OP_PLUS_NODE
+#ifndef OP_PLUS_NODE_HPP
+#define OP_PLUS_NODE_HPP
 
 #include "ast/SyntaxTreeNode.hpp"
 #include "generator/IGenerator.hpp"

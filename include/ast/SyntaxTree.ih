@@ -4,4 +4,5 @@
 #include "ast/IntegerNode.hpp"
 #include "ast/OpMinusNode.hpp"
 #include "ast/OpPlusNode.hpp"
+#include "ast/PrintNode.hpp"
 #include "ast/StatementsNode.hpp"

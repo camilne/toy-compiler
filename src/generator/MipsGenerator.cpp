@@ -5,6 +5,7 @@
 #include "ast/IntegerNode.hpp"
 #include "ast/OpMinusNode.hpp"
 #include "ast/OpPlusNode.hpp"
+#include "ast/PrintNode.hpp"
 #include "ast/StatementsNode.hpp"
 
 void MipsGenerator::generate(IdentifierNode& node) {
@@ -54,6 +55,22 @@ void MipsGenerator::generate(OpPlusNode& node) {
                           getTmpOffset(-1),
                           getTmpOffset(0));
     previousTmp();
+}
+
+void MipsGenerator::generate(PrintNode& node) {
+    code += MipsUtil::comment(node.toCode());
+
+    node.getExp()->accept(*this);
+
+    // print int
+    code += MipsUtil::loadImmediate("$v0", 1);
+    code += MipsUtil::copy("$a0", getTmp(tmpRegCounter));
+    code += "syscall\n";
+
+    // print newline
+    code += MipsUtil::loadImmediate("$v0", 11);
+    code += MipsUtil::loadImmediate("$a0", 10);
+    code += "syscall\n";
 }
 
 void MipsGenerator::generate(StatementsNode& node) {
