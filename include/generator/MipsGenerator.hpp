@@ -12,7 +12,9 @@ public:
     virtual void generate(IdentifierNode& node) override;
     virtual void generate(InitNode&       node) override;
     virtual void generate(IntegerNode&    node) override;
+    virtual void generate(OpDivideNode&   node) override;
     virtual void generate(OpMinusNode&    node) override;
+    virtual void generate(OpMultiplyNode& node) override;
     virtual void generate(OpPlusNode&     node) override;
     virtual void generate(PrintNode&      node) override;
     virtual void generate(StatementsNode& node) override;

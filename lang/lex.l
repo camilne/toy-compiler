@@ -17,6 +17,8 @@ PRINT_KEYWORD           print
 {WHITESPACE}                    /* Empty */
 {LINEFEED}                      ++yylineno;
 ";"                             return SEMICOLON;
+"/"                             return OP_DIV;
+"*"                             return OP_MUL;
 "+"                             return OP_PLUS;
 "-"                             return OP_MINUS;
 .                               { printf("unexpected character: %s", yytext); }

@@ -43,6 +43,16 @@ std::string MipsUtil::add(std::string rd, std::string rs, std::string rt) {
 }
 
 // static
+std::string MipsUtil::div(std::string rd, std::string rs, std::string rt) {
+    return "div " + rd + " " + rs + " " + rt + "\n";
+}
+
+// static
+std::string MipsUtil::mul(std::string rd, std::string rs, std::string rt) {
+    return "mul " + rd + " " + rs + " " + rt + "\n";
+}
+
+// static
 std::string MipsUtil::sub(std::string rd, std::string rs, std::string rt) {
     return "sub " + rd + " " + rs + " " + rt + "\n";
 }

@@ -3,7 +3,9 @@
 #include "ast/IdentifierNode.hpp"
 #include "ast/InitNode.hpp"
 #include "ast/IntegerNode.hpp"
+#include "ast/OpDivideNode.hpp"
 #include "ast/OpMinusNode.hpp"
+#include "ast/OpMultiplyNode.hpp"
 #include "ast/OpPlusNode.hpp"
 #include "ast/PrintNode.hpp"
 #include "ast/StatementsNode.hpp"
@@ -29,6 +31,20 @@ void MipsGenerator::generate(IntegerNode& node) {
     code += MipsUtil::loadImmediate(getTmp(nextTmp()), node.getValue());
 }
 
+void MipsGenerator::generate(OpDivideNode& node) {
+    if(node.getLeftExp())
+        node.getLeftExp()->accept(*this);
+    if(node.getRightExp())
+        node.getRightExp()->accept(*this);
+
+    code += MipsUtil::comment(node.toCode());
+
+    code += MipsUtil::div(getTmpOffset(-1),
+                          getTmpOffset(-1),
+                          getTmpOffset(0));
+    previousTmp();
+}
+
 void MipsGenerator::generate(OpMinusNode& node) {
     if(node.getLeftExp())
         node.getLeftExp()->accept(*this);
@@ -38,6 +54,20 @@ void MipsGenerator::generate(OpMinusNode& node) {
     code += MipsUtil::comment(node.toCode());
 
     code += MipsUtil::sub(getTmpOffset(-1),
+                          getTmpOffset(-1),
+                          getTmpOffset(0));
+    previousTmp();
+}
+
+void MipsGenerator::generate(OpMultiplyNode& node) {
+    if(node.getLeftExp())
+        node.getLeftExp()->accept(*this);
+    if(node.getRightExp())
+        node.getRightExp()->accept(*this);
+
+    code += MipsUtil::comment(node.toCode());
+
+    code += MipsUtil::mul(getTmpOffset(-1),
                           getTmpOffset(-1),
                           getTmpOffset(0));
     previousTmp();

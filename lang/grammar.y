@@ -31,6 +31,7 @@ SyntaxTree* ast;
 %token SEMICOLON PRINT_KEYWORD
 
 %left OP_PLUS OP_MINUS
+%left OP_MUL OP_DIV
 
 %start init
 
@@ -48,7 +49,9 @@ statement:
     | expression SEMICOLON                      { $$ = $1; }
 
 expression:
-      expression OP_PLUS expression             { $$ = new OpPlusNode($1, $3); }
+      expression OP_DIV expression              { $$ = new OpDivideNode($1, $3); }
+    | expression OP_MUL expression              { $$ = new OpMultiplyNode($1, $3); }
+    | expression OP_PLUS expression             { $$ = new OpPlusNode($1, $3); }
     | expression OP_MINUS expression            { $$ = new OpMinusNode($1, $3); }
     | IDENTIFIER                                { $$ = new IdentifierNode($1); }
     | INTEGER                                   { $$ = new IntegerNode($1); }
