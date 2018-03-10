@@ -1,14 +1,6 @@
 #include "generator/MipsGenerator.hpp"
 #include "generator/MipsUtil.hpp"
-#include "ast/IdentifierNode.hpp"
-#include "ast/InitNode.hpp"
-#include "ast/IntegerNode.hpp"
-#include "ast/OpDivideNode.hpp"
-#include "ast/OpMinusNode.hpp"
-#include "ast/OpMultiplyNode.hpp"
-#include "ast/OpPlusNode.hpp"
-#include "ast/PrintNode.hpp"
-#include "ast/StatementsNode.hpp"
+#include "ast/SyntaxTreeNodes.ih"
 
 void MipsGenerator::generate(IdentifierNode& node) {
     code += MipsUtil::comment(node.toCode());
@@ -114,17 +106,17 @@ void MipsGenerator::generate(StatementsNode& node) {
 }
 
 std::string MipsGenerator::getTmp(int val) {
-    if(val < 0 || val > 3)
+    if(val < 0 || val > NUM_TMP_REGISTERS - 1)
         return "INVALID(" + std::to_string(val) + ")";
     return "$t" + std::to_string(val);
 }
 
 std::string MipsGenerator::getTmpOffset(int off) {
-    if(tmpRegCounter + off >= 0 && tmpRegCounter + off <= 3)
+    if(tmpRegCounter + off >= 0 && tmpRegCounter + off <= NUM_TMP_REGISTERS - 1)
         return getTmp(tmpRegCounter + off);
 
     if(off >= -3)
-        return getTmp(tmpRegCounter + off + 4);
+        return getTmp(tmpRegCounter + off + NUM_TMP_REGISTERS);
 
     // Fix to pop off stack
     return getTmp(55);
@@ -132,7 +124,7 @@ std::string MipsGenerator::getTmpOffset(int off) {
 
 int MipsGenerator::previousTmp() {
     if(--tmpRegCounter < 0) {
-        tmpRegCounter = 3;
+        tmpRegCounter = NUM_TMP_REGISTERS - 1;
     }
     return tmpRegCounter;
 }
@@ -143,20 +135,20 @@ int MipsGenerator::previousTmpAndPop() {
         tmpUse[tmpRegCounter]--;
     }
     if(--tmpRegCounter < 0) {
-        tmpRegCounter = 3;
+        tmpRegCounter = NUM_TMP_REGISTERS - 1;
     }
     return tmpRegCounter;
 }
 
 int MipsGenerator::nextTmp() {
-    if(++tmpRegCounter > 3) {
+    if(++tmpRegCounter > NUM_TMP_REGISTERS - 1) {
         tmpRegCounter = 0;
     }
     return tmpRegCounter;
 }
 
 int MipsGenerator::nextTmpAndPush() {
-    if(++tmpRegCounter > 3) {
+    if(++tmpRegCounter > NUM_TMP_REGISTERS - 1) {
         tmpRegCounter = 0;
     }
     if(tmpUse[tmpRegCounter]) {

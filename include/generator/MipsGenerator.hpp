@@ -25,10 +25,12 @@ public:
     virtual void generate(StatementsNode& node) override;
 
 private:
+    static const int NUM_TMP_REGISTERS = 4;
+
     /// Holds the current tmp register for operations.
     int tmpRegCounter;
     /// Holds the number of times that each tmp register has been pushed to the stack for a block.
-    int tmpUse[4] = {0, 0, 0, 0};
+    int tmpUse[NUM_TMP_REGISTERS] = {0, 0, 0, 0};
 
     /**
     Return the string value of the tmp register number.
