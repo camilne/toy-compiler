@@ -28,7 +28,7 @@ void MipsGenerator::generate(IntegerNode& node) {
     code += MipsUtil::comment(node.toCode());
 
     // TODO: better register allocation.
-    code += MipsUtil::loadImmediate(getTmp(nextTmp()), node.getValue());
+    code += MipsUtil::loadImmediate(getTmp(nextTmpAndPush()), node.getValue());
 }
 
 void MipsGenerator::generate(OpDivideNode& node) {
@@ -42,7 +42,7 @@ void MipsGenerator::generate(OpDivideNode& node) {
     code += MipsUtil::div(getTmpOffset(-1),
                           getTmpOffset(-1),
                           getTmpOffset(0));
-    previousTmp();
+    previousTmpAndPop();
 }
 
 void MipsGenerator::generate(OpMinusNode& node) {
@@ -56,7 +56,7 @@ void MipsGenerator::generate(OpMinusNode& node) {
     code += MipsUtil::sub(getTmpOffset(-1),
                           getTmpOffset(-1),
                           getTmpOffset(0));
-    previousTmp();
+    previousTmpAndPop();
 }
 
 void MipsGenerator::generate(OpMultiplyNode& node) {
@@ -70,7 +70,7 @@ void MipsGenerator::generate(OpMultiplyNode& node) {
     code += MipsUtil::mul(getTmpOffset(-1),
                           getTmpOffset(-1),
                           getTmpOffset(0));
-    previousTmp();
+    previousTmpAndPop();
 }
 
 void MipsGenerator::generate(OpPlusNode& node) {
@@ -84,7 +84,7 @@ void MipsGenerator::generate(OpPlusNode& node) {
     code += MipsUtil::add(getTmpOffset(-1),
                           getTmpOffset(-1),
                           getTmpOffset(0));
-    previousTmp();
+    previousTmpAndPop();
 }
 
 void MipsGenerator::generate(PrintNode& node) {
@@ -133,7 +133,17 @@ std::string MipsGenerator::getTmpOffset(int off) {
 int MipsGenerator::previousTmp() {
     if(--tmpRegCounter < 0) {
         tmpRegCounter = 3;
+    }
+    return tmpRegCounter;
+}
+
+int MipsGenerator::previousTmpAndPop() {
+    if(tmpUse[tmpRegCounter]) {
         code += MipsUtil::pop(getTmp(tmpRegCounter));
+        tmpUse[tmpRegCounter]--;
+    }
+    if(--tmpRegCounter < 0) {
+        tmpRegCounter = 3;
     }
     return tmpRegCounter;
 }
@@ -141,7 +151,17 @@ int MipsGenerator::previousTmp() {
 int MipsGenerator::nextTmp() {
     if(++tmpRegCounter > 3) {
         tmpRegCounter = 0;
+    }
+    return tmpRegCounter;
+}
+
+int MipsGenerator::nextTmpAndPush() {
+    if(++tmpRegCounter > 3) {
+        tmpRegCounter = 0;
+    }
+    if(tmpUse[tmpRegCounter]) {
         code += MipsUtil::push(getTmp(tmpRegCounter));
     }
+    tmpUse[tmpRegCounter]++;
     return tmpRegCounter;
 }

@@ -28,7 +28,7 @@ SyntaxTree* ast;
 
 %token <STRING> IDENTIFIER
 %token <INT> INTEGER
-%token SEMICOLON PRINT_KEYWORD
+%token SEMICOLON PRINT_KEYWORD LEFT_PAREN RIGHT_PAREN
 
 %left OP_PLUS OP_MINUS
 %left OP_MUL OP_DIV
@@ -53,6 +53,7 @@ expression:
     | expression OP_MUL expression              { $$ = new OpMultiplyNode($1, $3); }
     | expression OP_PLUS expression             { $$ = new OpPlusNode($1, $3); }
     | expression OP_MINUS expression            { $$ = new OpMinusNode($1, $3); }
+    | LEFT_PAREN expression RIGHT_PAREN         { $$ = $2; }
     | IDENTIFIER                                { $$ = new IdentifierNode($1); }
     | INTEGER                                   { $$ = new IntegerNode($1); }
 

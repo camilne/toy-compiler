@@ -21,11 +21,14 @@ public:
 
 private:
     int tmpRegCounter;
+    int tmpUse[4] = {0, 0, 0, 0};
 
     std::string getTmp(int val);
     std::string getTmpOffset(int off);
     int previousTmp();
+    int previousTmpAndPop();
     int nextTmp();
+    int nextTmpAndPush();
 };
 
 #endif

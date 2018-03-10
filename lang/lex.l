@@ -21,6 +21,8 @@ PRINT_KEYWORD           print
 "*"                             return OP_MUL;
 "+"                             return OP_PLUS;
 "-"                             return OP_MINUS;
+"("                             return LEFT_PAREN;
+")"                             return RIGHT_PAREN;
 .                               { printf("unexpected character: %s", yytext); }
 
 %%
