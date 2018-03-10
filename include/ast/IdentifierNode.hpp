@@ -11,6 +11,8 @@ public:
         : name(name)
     {}
 
+    virtual std::string toCode() const;
+
     virtual void accept(IGenerator& generator) {
         generator.generate(*this);
     }

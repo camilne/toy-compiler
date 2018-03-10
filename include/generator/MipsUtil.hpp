@@ -19,6 +19,7 @@ public:
     static std::string toHex(word val);
     static std::string push(std::string reg);
     static std::string pop(std::string reg);
+    static std::string comment(std::string message);
 };
 
 #endif

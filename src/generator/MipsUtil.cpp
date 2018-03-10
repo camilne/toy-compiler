@@ -69,3 +69,8 @@ std::string MipsUtil::pop(std::string reg) {
     code += "addi $sp $sp 4\n";
     return code;
 }
+
+// static
+std::string MipsUtil::comment(std::string message) {
+    return "# " + message + "\n";
+}

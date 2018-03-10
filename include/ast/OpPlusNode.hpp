@@ -10,6 +10,8 @@ public:
         : leftExp(leftExp), rightExp(rightExp)
     {}
 
+    virtual std::string toCode() const;
+
     virtual void accept(IGenerator& generator) {
         generator.generate(*this);
     }

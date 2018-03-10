@@ -8,16 +8,22 @@
 #include "ast/StatementsNode.hpp"
 
 void MipsGenerator::generate(IdentifierNode& node) {
+    code += MipsUtil::comment(node.toCode());
+
     code += node.getName();
 }
 
 void MipsGenerator::generate(InitNode& node) {
+    code += MipsUtil::comment(node.toCode());
+
     code += ".text\n";
     if(node.getStatements())
         node.getStatements()->accept(*this);
 }
 
 void MipsGenerator::generate(IntegerNode& node) {
+    code += MipsUtil::comment(node.toCode());
+
     // TODO: better register allocation.
     code += MipsUtil::loadImmediate(getTmp(nextTmp()), node.getValue());
 }
@@ -28,9 +34,11 @@ void MipsGenerator::generate(OpMinusNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    code += MipsUtil::sub(getTmpOffset(-2),
-                          getTmpOffset(-2),
-                          getTmpOffset(-1));
+    code += MipsUtil::comment(node.toCode());
+
+    code += MipsUtil::sub(getTmpOffset(-1),
+                          getTmpOffset(-1),
+                          getTmpOffset(0));
     previousTmp();
 }
 
@@ -40,9 +48,11 @@ void MipsGenerator::generate(OpPlusNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    code += MipsUtil::add(getTmpOffset(-2),
-                          getTmpOffset(-2),
-                          getTmpOffset(-1));
+    code += MipsUtil::comment(node.toCode());
+
+    code += MipsUtil::add(getTmpOffset(-1),
+                          getTmpOffset(-1),
+                          getTmpOffset(0));
     previousTmp();
 }
 
@@ -75,16 +85,16 @@ std::string MipsGenerator::getTmpOffset(int off) {
 
 int MipsGenerator::previousTmp() {
     if(--tmpRegCounter < 0) {
-        code += MipsUtil::pop(getTmp(tmpRegCounter + 1));
         tmpRegCounter = 3;
+        code += MipsUtil::pop(getTmp(tmpRegCounter));
     }
     return tmpRegCounter;
 }
 
 int MipsGenerator::nextTmp() {
     if(++tmpRegCounter > 3) {
-        code += MipsUtil::push(getTmp(tmpRegCounter - 1));
         tmpRegCounter = 0;
+        code += MipsUtil::push(getTmp(tmpRegCounter));
     }
     return tmpRegCounter;
 }
