@@ -34,7 +34,7 @@ void MipsGenerator::generate(OpDivideNode& node) {
 
     add(std::make_unique<MipsComment>(node.toCode()));
 
-    add(std::make_unique<MipsDivide>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
+    addOpForCurrentTmp<MipsDivide>();
     previousTmpAndPop();
 }
 
@@ -46,7 +46,7 @@ void MipsGenerator::generate(OpMinusNode& node) {
 
     add(std::make_unique<MipsComment>(node.toCode()));
 
-    add(std::make_unique<MipsMinus>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
+    addOpForCurrentTmp<MipsMinus>();
     previousTmpAndPop();
 }
 
@@ -58,7 +58,7 @@ void MipsGenerator::generate(OpMultiplyNode& node) {
 
     add(std::make_unique<MipsComment>(node.toCode()));
 
-    add(std::make_unique<MipsMultiply>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
+    addOpForCurrentTmp<MipsMultiply>();
     previousTmpAndPop();
 }
 
@@ -70,7 +70,7 @@ void MipsGenerator::generate(OpPlusNode& node) {
 
     add(std::make_unique<MipsComment>(node.toCode()));
 
-    add(std::make_unique<MipsAdd>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
+    addOpForCurrentTmp<MipsAdd>();
     previousTmpAndPop();
 }
 
@@ -130,7 +130,7 @@ int MipsGenerator::previousTmp() {
 }
 
 int MipsGenerator::previousTmpAndPop() {
-    if(tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN]) {
+    if(tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN] > 1) {
         add(std::make_unique<MipsPop>(tmpRegCounter));
         tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN]--;
     }

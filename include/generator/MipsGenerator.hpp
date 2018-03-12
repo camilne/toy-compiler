@@ -82,7 +82,17 @@ private:
     @param statement An instance of the statement to add.
     */
     void add(std::unique_ptr<MipsStatement>&& statement);
+    /**
+    Append a mips op statement to the end of the current statements. Uses the previous and current tmp registers as source and the previous tmp register as the desination.
 
+    */
+    template <typename T>
+    void addOpForCurrentTmp();
 };
+
+template <typename T>
+void MipsGenerator::addOpForCurrentTmp() {
+    add(std::make_unique<T>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
+}
 
 #endif
