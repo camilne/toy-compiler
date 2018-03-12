@@ -5,7 +5,7 @@ TEST_FOLDER		:= test
 GENERATED_FOLDER	:= generated
 
 CXX				:= g++
-CXXFLAGS		:= -std=c++11 -g3 -I $(INCLUDE_FOLDER)
+CXXFLAGS		:= -std=c++14 -g3 -Wall -Wextra -I $(INCLUDE_FOLDER)
 
 FLEX			:= flex
 FLEX_SOURCE		:= $(LANG_FOLDER)/lex.l

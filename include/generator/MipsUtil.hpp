@@ -9,16 +9,13 @@ using byte = uint8_t;
 
 class MipsUtil {
 public:
-    static std::string loadImmediate(std::string reg, word imm);
-    static std::string add(std::string rd, std::string rs, std::string rt);
-    static std::string div(std::string rd, std::string rs, std::string rt);
-    static std::string mul(std::string rd, std::string rs, std::string rt);
-    static std::string sub(std::string rd, std::string rs, std::string rt);
+    /// The register number of the first tmp register.
+    static const int TMP_BEGIN = 8;
+    /// The register number 1 after the last tmp register.
+    static const int TMP_END = 16;
+
     static std::string toHex(word val);
-    static std::string push(std::string reg);
-    static std::string pop(std::string reg);
-    static std::string copy(std::string dest, std::string src);
-    static std::string comment(std::string message);
+    static std::string toRegister(int val);
 };
 
 #endif

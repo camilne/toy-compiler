@@ -1,15 +1,17 @@
 #include "generator/MipsGenerator.hpp"
 #include "generator/MipsUtil.hpp"
 #include "ast/SyntaxTreeNodes.ih"
+#include <sstream>
+#include <iostream>
 
 void MipsGenerator::generate(IdentifierNode& node) {
-    code += MipsUtil::comment(node.toCode());
+    add(std::make_unique<MipsComment>(node.toCode()));
 
-    code += node.getName();
+    //code += node.getName();
 }
 
 void MipsGenerator::generate(InitNode& node) {
-    code += MipsUtil::comment(node.toCode());
+    add(std::make_unique<MipsComment>(node.toCode()));
 
     code += ".text\n";
     if(node.getStatements())
@@ -17,10 +19,11 @@ void MipsGenerator::generate(InitNode& node) {
 }
 
 void MipsGenerator::generate(IntegerNode& node) {
-    code += MipsUtil::comment(node.toCode());
+    add(std::make_unique<MipsComment>("Integer " + node.toCode()));
 
     // TODO: better register allocation.
-    code += MipsUtil::loadImmediate(getTmp(nextTmpAndPush()), node.getValue());
+    auto reg = nextTmpAndPush();
+    add(std::make_unique<MipsLoadImmediate>(reg, node.getValue()));
 }
 
 void MipsGenerator::generate(OpDivideNode& node) {
@@ -29,11 +32,9 @@ void MipsGenerator::generate(OpDivideNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    code += MipsUtil::comment(node.toCode());
+    add(std::make_unique<MipsComment>(node.toCode()));
 
-    code += MipsUtil::div(getTmpOffset(-1),
-                          getTmpOffset(-1),
-                          getTmpOffset(0));
+    add(std::make_unique<MipsDivide>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
     previousTmpAndPop();
 }
 
@@ -43,11 +44,9 @@ void MipsGenerator::generate(OpMinusNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    code += MipsUtil::comment(node.toCode());
+    add(std::make_unique<MipsComment>(node.toCode()));
 
-    code += MipsUtil::sub(getTmpOffset(-1),
-                          getTmpOffset(-1),
-                          getTmpOffset(0));
+    add(std::make_unique<MipsMinus>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
     previousTmpAndPop();
 }
 
@@ -57,11 +56,9 @@ void MipsGenerator::generate(OpMultiplyNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    code += MipsUtil::comment(node.toCode());
+    add(std::make_unique<MipsComment>(node.toCode()));
 
-    code += MipsUtil::mul(getTmpOffset(-1),
-                          getTmpOffset(-1),
-                          getTmpOffset(0));
+    add(std::make_unique<MipsMultiply>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
     previousTmpAndPop();
 }
 
@@ -71,89 +68,96 @@ void MipsGenerator::generate(OpPlusNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    code += MipsUtil::comment(node.toCode());
+    add(std::make_unique<MipsComment>(node.toCode()));
 
-    code += MipsUtil::add(getTmpOffset(-1),
-                          getTmpOffset(-1),
-                          getTmpOffset(0));
+    add(std::make_unique<MipsAdd>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
     previousTmpAndPop();
 }
 
 void MipsGenerator::generate(PrintNode& node) {
-    code += MipsUtil::comment(node.toCode());
+    add(std::make_unique<MipsComment>(node.toCode()));
 
-    node.getExp()->accept(*this);
+    if(node.getExp())
+        node.getExp()->accept(*this);
+    else
+        add(std::make_unique<MipsComment>("No expression in print"));
 
     // print int
-    code += MipsUtil::loadImmediate("$v0", 1);
-    code += MipsUtil::copy("$a0", getTmp(tmpRegCounter));
-    code += "syscall\n";
+    add(std::make_unique<MipsSysCall<std::string>>(1, MipsUtil::toRegister(tmpRegCounter)));
 
     // print newline
-    code += MipsUtil::loadImmediate("$v0", 11);
-    code += MipsUtil::loadImmediate("$a0", 10);
-    code += "syscall\n";
+    add(std::make_unique<MipsSysCall<int>>(11, 10));
 }
 
 void MipsGenerator::generate(StatementsNode& node) {
     if(node.getStatements())
         node.getStatements()->accept(*this);
-    if(node.getStatement()) {
-        //code += MipsUtil::newFrame();
+    if(node.getStatement())
         node.getStatement()->accept(*this);
-        //code += MipsUtil::popFrame();
+}
+
+const std::string& MipsGenerator::getCode() {
+    static bool isCodeGenerated = false;
+
+    if(!isCodeGenerated) {
+        std::stringstream ss;
+        for(std::unique_ptr<MipsStatement>& statement : mipsStatements) {
+            ss << statement->toCode();
+        }
+        code += ss.str();
+        isCodeGenerated = true;
     }
+
+    return code;
 }
 
-std::string MipsGenerator::getTmp(int val) {
-    if(val < 0 || val > NUM_TMP_REGISTERS - 1)
-        return "INVALID(" + std::to_string(val) + ")";
-    return "$t" + std::to_string(val);
-}
+int MipsGenerator::getTmpOffset(int off) {
+    if(tmpRegCounter + off >= MipsUtil::TMP_BEGIN && tmpRegCounter + off < MipsUtil::TMP_END)
+        return tmpRegCounter + off;
 
-std::string MipsGenerator::getTmpOffset(int off) {
-    if(tmpRegCounter + off >= 0 && tmpRegCounter + off <= NUM_TMP_REGISTERS - 1)
-        return getTmp(tmpRegCounter + off);
-
-    if(off >= -3)
-        return getTmp(tmpRegCounter + off + NUM_TMP_REGISTERS);
+    if(off > -NUM_TMP_REGISTERS)
+        return tmpRegCounter + off + NUM_TMP_REGISTERS;
 
     // Fix to pop off stack
-    return getTmp(55);
+    return 55;
 }
 
 int MipsGenerator::previousTmp() {
-    if(--tmpRegCounter < 0) {
-        tmpRegCounter = NUM_TMP_REGISTERS - 1;
+    if(--tmpRegCounter < MipsUtil::TMP_BEGIN) {
+        tmpRegCounter = MipsUtil::TMP_END - 1;
     }
     return tmpRegCounter;
 }
 
 int MipsGenerator::previousTmpAndPop() {
-    if(tmpUse[tmpRegCounter]) {
-        code += MipsUtil::pop(getTmp(tmpRegCounter));
-        tmpUse[tmpRegCounter]--;
+    if(tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN]) {
+        add(std::make_unique<MipsPop>(tmpRegCounter));
+        tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN]--;
     }
-    if(--tmpRegCounter < 0) {
-        tmpRegCounter = NUM_TMP_REGISTERS - 1;
+    if(--tmpRegCounter < MipsUtil::TMP_BEGIN) {
+        tmpRegCounter = MipsUtil::TMP_END - 1;
     }
     return tmpRegCounter;
 }
 
 int MipsGenerator::nextTmp() {
-    if(++tmpRegCounter > NUM_TMP_REGISTERS - 1) {
-        tmpRegCounter = 0;
+    if(++tmpRegCounter >= MipsUtil::TMP_END) {
+        tmpRegCounter = MipsUtil::TMP_BEGIN;
     }
     return tmpRegCounter;
 }
 
 int MipsGenerator::nextTmpAndPush() {
-    if(++tmpRegCounter > NUM_TMP_REGISTERS - 1) {
-        tmpRegCounter = 0;
+    if(++tmpRegCounter >= MipsUtil::TMP_END) {
+        tmpRegCounter = MipsUtil::TMP_BEGIN;
     }
-    if(tmpUse[tmpRegCounter]) {
-        code += MipsUtil::push(getTmp(tmpRegCounter));
+    if(tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN]) {
+        add(std::make_unique<MipsPush>(tmpRegCounter));
     }
-    tmpUse[tmpRegCounter]++;
+    tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN]++;
     return tmpRegCounter;
+}
+
+void MipsGenerator::add(std::unique_ptr<MipsStatement>&& statement) {
+    mipsStatements.emplace_back(std::move(statement));
 }
