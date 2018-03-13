@@ -12,7 +12,7 @@ FLEX_SOURCE		:= $(LANG_FOLDER)/lex.l
 FLEX_GENERATED	:= lex.yy.c
 
 BISON			:= bison
-BISONFLAGS		:= -d
+BISONFLAGS		:= -d -Wall
 BISON_SOURCE	:= $(LANG_FOLDER)/grammar.y
 BISON_GENERATED := grammar.tab.*
 

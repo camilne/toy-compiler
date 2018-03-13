@@ -105,7 +105,7 @@ void MipsGenerator::optimize() {
     for(auto it = mipsStatements.rbegin(); it != mipsStatements.rend(); /* Empty */) {
         std::shared_ptr<MipsStatement> obj = *it;
         if(std::shared_ptr<MipsPop> pop = std::dynamic_pointer_cast<MipsPop>(obj)) {
-            if(pop->getRegister() >= 0 && pop->getRegister() < popRegisters.size()) {
+            if(pop->getRegister() < popRegisters.size()) {
                 if(!popRegisters[pop->getRegister()]) {
                     mipsStatements.erase(std::next(it).base());
                 } else {
@@ -114,13 +114,13 @@ void MipsGenerator::optimize() {
                 }
             }
         } else if(std::shared_ptr<MipsPush> push = std::dynamic_pointer_cast<MipsPush>(obj)) {
-            if(push->getRegister() >= 0 && push->getRegister() < popRegisters.size())
+            if(push->getRegister() < popRegisters.size())
                 ++popRegisters[push->getRegister()];
             ++it;
         } else if(std::shared_ptr<MipsOp> op = std::dynamic_pointer_cast<MipsOp>(obj)) {
-            if(op->getArg1Register() >= 0 && op->getArg1Register() < popRegisters.size())
+            if(op->getArg1Register() < popRegisters.size())
                 ++popRegisters[op->getArg1Register()];
-            if(op->getArg2Register() >= 0 && op->getArg2Register() < popRegisters.size())
+            if(op->getArg2Register() < popRegisters.size())
                 ++popRegisters[op->getArg2Register()];
             ++it;
         } else {

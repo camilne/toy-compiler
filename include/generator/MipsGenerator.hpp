@@ -16,7 +16,7 @@ public:
     MipsGenerator()
         : tmpRegCounter(MipsUtil::TMP_BEGIN)
     {
-        tmpUse.resize(NUM_TMP_REGISTERS);
+        tmpUse.resize(NUM_REGISTERS);
         for(int& i : tmpUse) {
             i = 0;
         }

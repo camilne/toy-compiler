@@ -7,7 +7,7 @@
 
 class MipsPop : public MipsStatement {
 public:
-    explicit MipsPop(int reg)
+    explicit MipsPop(unsigned int reg)
         : reg(reg)
     {}
 
@@ -18,12 +18,12 @@ public:
         return ss.str();
     }
 
-    int getRegister() const {
+    unsigned int getRegister() const {
         return reg;
     }
 
 private:
-    int reg;
+    unsigned int reg;
 };
 
 #endif
