@@ -22,6 +22,8 @@ int main() {
         MipsGenerator generator;
         ast->accept(generator);
 
+        generator.optimize();
+
         std::cout << generator.getCode() << std::endl;
     }
 

@@ -5,13 +5,13 @@
 #include <iostream>
 
 void MipsGenerator::generate(IdentifierNode& node) {
-    add(std::make_unique<MipsComment>(node.toCode()));
+    add(std::make_shared<MipsComment>(node.toCode()));
 
     //code += node.getName();
 }
 
 void MipsGenerator::generate(InitNode& node) {
-    add(std::make_unique<MipsComment>(node.toCode()));
+    add(std::make_shared<MipsComment>(node.toCode()));
 
     code += ".text\n";
     if(node.getStatements())
@@ -19,11 +19,11 @@ void MipsGenerator::generate(InitNode& node) {
 }
 
 void MipsGenerator::generate(IntegerNode& node) {
-    add(std::make_unique<MipsComment>("Integer " + node.toCode()));
+    add(std::make_shared<MipsComment>("Integer " + node.toCode()));
 
     // TODO: better register allocation.
     auto reg = nextTmpAndPush();
-    add(std::make_unique<MipsLoadImmediate>(reg, node.getValue()));
+    add(std::make_shared<MipsLoadImmediate>(reg, node.getValue()));
 }
 
 void MipsGenerator::generate(OpDivideNode& node) {
@@ -32,7 +32,7 @@ void MipsGenerator::generate(OpDivideNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    add(std::make_unique<MipsComment>(node.toCode()));
+    add(std::make_shared<MipsComment>(node.toCode()));
 
     addOpForCurrentTmp<MipsDivide>();
     previousTmpAndPop();
@@ -44,7 +44,7 @@ void MipsGenerator::generate(OpMinusNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    add(std::make_unique<MipsComment>(node.toCode()));
+    add(std::make_shared<MipsComment>(node.toCode()));
 
     addOpForCurrentTmp<MipsMinus>();
     previousTmpAndPop();
@@ -56,7 +56,7 @@ void MipsGenerator::generate(OpMultiplyNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    add(std::make_unique<MipsComment>(node.toCode()));
+    add(std::make_shared<MipsComment>(node.toCode()));
 
     addOpForCurrentTmp<MipsMultiply>();
     previousTmpAndPop();
@@ -68,25 +68,25 @@ void MipsGenerator::generate(OpPlusNode& node) {
     if(node.getRightExp())
         node.getRightExp()->accept(*this);
 
-    add(std::make_unique<MipsComment>(node.toCode()));
+    add(std::make_shared<MipsComment>(node.toCode()));
 
     addOpForCurrentTmp<MipsAdd>();
     previousTmpAndPop();
 }
 
 void MipsGenerator::generate(PrintNode& node) {
-    add(std::make_unique<MipsComment>(node.toCode()));
+    add(std::make_shared<MipsComment>(node.toCode()));
 
     if(node.getExp())
         node.getExp()->accept(*this);
     else
-        add(std::make_unique<MipsComment>("No expression in print"));
+        add(std::make_shared<MipsComment>("No expression in print"));
 
     // print int
-    add(std::make_unique<MipsSysCall<std::string>>(1, MipsUtil::toRegister(tmpRegCounter)));
+    add(std::make_shared<MipsSysCall<std::string>>(1, MipsUtil::toRegister(tmpRegCounter)));
 
     // print newline
-    add(std::make_unique<MipsSysCall<int>>(11, 10));
+    add(std::make_shared<MipsSysCall<int>>(11, 10));
 }
 
 void MipsGenerator::generate(StatementsNode& node) {
@@ -96,12 +96,45 @@ void MipsGenerator::generate(StatementsNode& node) {
         node.getStatement()->accept(*this);
 }
 
+void MipsGenerator::optimize() {
+    // Remove trailing pops if register is unused after
+    std::vector<int> popRegisters(NUM_REGISTERS);
+    for(auto& i : popRegisters)
+        i = 0;
+
+    for(auto it = mipsStatements.rbegin(); it != mipsStatements.rend(); /* Empty */) {
+        std::shared_ptr<MipsStatement> obj = *it;
+        if(std::shared_ptr<MipsPop> pop = std::dynamic_pointer_cast<MipsPop>(obj)) {
+            if(pop->getRegister() >= 0 && pop->getRegister() < popRegisters.size()) {
+                if(!popRegisters[pop->getRegister()]) {
+                    mipsStatements.erase(std::next(it).base());
+                } else {
+                    --popRegisters[pop->getRegister()];
+                    ++it;
+                }
+            }
+        } else if(std::shared_ptr<MipsPush> push = std::dynamic_pointer_cast<MipsPush>(obj)) {
+            if(push->getRegister() >= 0 && push->getRegister() < popRegisters.size())
+                ++popRegisters[push->getRegister()];
+            ++it;
+        } else if(std::shared_ptr<MipsOp> op = std::dynamic_pointer_cast<MipsOp>(obj)) {
+            if(op->getArg1Register() >= 0 && op->getArg1Register() < popRegisters.size())
+                ++popRegisters[op->getArg1Register()];
+            if(op->getArg2Register() >= 0 && op->getArg2Register() < popRegisters.size())
+                ++popRegisters[op->getArg2Register()];
+            ++it;
+        } else {
+            ++it;
+        }
+    }
+}
+
 const std::string& MipsGenerator::getCode() {
     static bool isCodeGenerated = false;
 
     if(!isCodeGenerated) {
         std::stringstream ss;
-        for(std::unique_ptr<MipsStatement>& statement : mipsStatements) {
+        for(std::shared_ptr<MipsStatement>& statement : mipsStatements) {
             ss << statement->toCode();
         }
         code += ss.str();
@@ -131,7 +164,7 @@ int MipsGenerator::previousTmp() {
 
 int MipsGenerator::previousTmpAndPop() {
     if(tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN] > 1) {
-        add(std::make_unique<MipsPop>(tmpRegCounter));
+        add(std::make_shared<MipsPop>(tmpRegCounter));
         tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN]--;
     }
     if(--tmpRegCounter < MipsUtil::TMP_BEGIN) {
@@ -152,12 +185,12 @@ int MipsGenerator::nextTmpAndPush() {
         tmpRegCounter = MipsUtil::TMP_BEGIN;
     }
     if(tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN]) {
-        add(std::make_unique<MipsPush>(tmpRegCounter));
+        add(std::make_shared<MipsPush>(tmpRegCounter));
     }
     tmpUse[tmpRegCounter - MipsUtil::TMP_BEGIN]++;
     return tmpRegCounter;
 }
 
-void MipsGenerator::add(std::unique_ptr<MipsStatement>&& statement) {
-    mipsStatements.emplace_back(std::move(statement));
+void MipsGenerator::add(std::shared_ptr<MipsStatement>&& statement) {
+    mipsStatements.emplace_back(statement);
 }

@@ -32,18 +32,24 @@ public:
     virtual void generate(PrintNode&      node) override;
     virtual void generate(StatementsNode& node) override;
 
+    virtual void optimize() override;
+
     virtual const std::string& getCode() override;
 
 private:
+    /// The number of saved registers on a mips machine.
+    static const int NUM_SAVED_REGISTERS = 8;
     /// The number of tmp registers on a mips machine.
     static const int NUM_TMP_REGISTERS = 8;
+    /// The total number of tmp registers on a mips machine.
+    static const int NUM_REGISTERS = NUM_SAVED_REGISTERS + NUM_TMP_REGISTERS;
 
     /// Holds the current tmp register for operations.
     int tmpRegCounter;
     /// Holds the number of times that each tmp register has been pushed to the stack for a block.
     std::vector<int> tmpUse;
     /// Holds the statements in the program in order of the output file.
-    std::vector<std::unique_ptr<MipsStatement>> mipsStatements;
+    std::vector<std::shared_ptr<MipsStatement>> mipsStatements;
 
     /**
     Return the tmp register offset from <tt>tmpRegCounter</tt>. The offset will wrap around the registers if it goes out of range.
@@ -81,7 +87,7 @@ private:
 
     @param statement An instance of the statement to add.
     */
-    void add(std::unique_ptr<MipsStatement>&& statement);
+    void add(std::shared_ptr<MipsStatement>&& statement);
     /**
     Append a mips op statement to the end of the current statements. Uses the previous and current tmp registers as source and the previous tmp register as the desination.
 
@@ -92,7 +98,7 @@ private:
 
 template <typename T>
 void MipsGenerator::addOpForCurrentTmp() {
-    add(std::make_unique<T>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
+    add(std::make_shared<T>(getTmpOffset(-1), getTmpOffset(-1), getTmpOffset(0)));
 }
 
 #endif

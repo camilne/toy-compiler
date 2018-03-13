@@ -18,6 +18,10 @@ public:
         return ss.str();
     }
 
+    int getRegister() const {
+        return reg;
+    }
+
 private:
     int reg;
 };

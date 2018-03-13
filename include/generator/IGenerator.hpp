@@ -25,6 +25,10 @@ public:
     virtual void generate(PrintNode&      node) = 0;
     virtual void generate(StatementsNode& node) = 0;
 
+    virtual void optimize() {
+        // Empty
+    }
+
     virtual const std::string& getCode() {
         return code;
     }
