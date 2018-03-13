@@ -19,7 +19,7 @@ int main() {
     if(result)
         std::cout << "This input is invalid." << std::endl;
     else {
-        MipsGenerator generator;
+        MipsGenerator generator(false);
         ast->accept(generator);
 
         generator.optimize();

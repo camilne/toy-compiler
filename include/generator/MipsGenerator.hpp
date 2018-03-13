@@ -13,8 +13,8 @@ Uses the visitor pattern to visit every node and generate separate code for each
 */
 class MipsGenerator : public IGenerator {
 public:
-    MipsGenerator()
-        : tmpRegCounter(MipsUtil::TMP_BEGIN)
+    explicit MipsGenerator(bool debug = false)
+        : debug(debug), tmpRegCounter(MipsUtil::TMP_BEGIN)
     {
         tmpUse.resize(NUM_REGISTERS);
         for(int& i : tmpUse) {
@@ -44,6 +44,8 @@ private:
     /// The total number of tmp registers on a mips machine.
     static const int NUM_REGISTERS = NUM_SAVED_REGISTERS + NUM_TMP_REGISTERS;
 
+    /// If the compiler should generate comments in the assembly.
+    bool debug;
     /// Holds the current tmp register for operations.
     int tmpRegCounter;
     /// Holds the number of times that each tmp register has been pushed to the stack for a block.

@@ -192,5 +192,9 @@ int MipsGenerator::nextTmpAndPush() {
 }
 
 void MipsGenerator::add(std::shared_ptr<MipsStatement>&& statement) {
+    // Ignore if it is a comment statement
+    if(!debug && std::dynamic_pointer_cast<MipsComment>(statement))
+        return;
+
     mipsStatements.emplace_back(statement);
 }
