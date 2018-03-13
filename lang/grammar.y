@@ -1,19 +1,21 @@
+%define parse.error verbose
+
 %code requires{
-#include "ast/SyntaxTree.ih"
+    #include "ast/SyntaxTree.ih"
 }
 
 %{
-#include <stdio.h>
-#include <stdlib.h>
+    #include <stdio.h>
+    #include <stdlib.h>
 
-#include <iostream>
-#include "ast/SyntaxTree.ih"
+    #include <iostream>
+    #include "ast/SyntaxTree.ih"
 
-int yylex(void);
-void yyerror(char const*);
-extern char* yytext;
+    int yylex(void);
+    void yyerror(char const*);
+    extern char* yytext;
 
-SyntaxTree* ast;
+    SyntaxTree* ast;
 %}
 
 %union {
@@ -60,6 +62,5 @@ expression:
 %%
 
 void yyerror(char const* msg) {
-    printf("Error: %s\n", msg);
-    exit(1);
+    fprintf(stderr, "%s\n", msg);
 }
