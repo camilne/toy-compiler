@@ -6,6 +6,10 @@ print 3 * 5;
 print 5 + 3 * 2;
 print -4 + 3 * -2;
 
+/** Multiline comments
+* tests /*\/\/\/\/**
+and even more
+**/
 print 11111111;
 
 // basic variable tests
@@ -16,6 +20,9 @@ print a;
 a = a / 2 + a;
 print a;
 
+/*
+This is the second section.
+*/
 print 22222222;
 
 // multi-variable tests
@@ -26,6 +33,9 @@ my_test2 = my_test2 * 2;
 print my_test1;
 print my_test2;
 
+/*
+This is the third section.
+*/
 print 33333333;
 
 // Fibonacci sequence (while loop construction)

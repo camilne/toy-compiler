@@ -9,12 +9,14 @@ WHITESPACE              [ \r\t\v\f]
 LINEFEED                \n
 PRINT_KEYWORD           print
 WHILE_KEYWORD           while
-LINE_COMMENT            \/\/.*
+LINE_COMMENT            "//".*
+BLOCK_COMMENT           "/*"[^*]*[*]+([^*/][^*]*[*]+)*[/]
 
 %%
 
 {WHITESPACE}                    /* Empty */
 {LINE_COMMENT}                  /* Empty */
+{BLOCK_COMMENT}                 /* Empty */
 {PRINT_KEYWORD}                 return PRINT_KEYWORD;
 {WHILE_KEYWORD}                 return WHILE_KEYWORD;
 {IDENTIFIER}                    { yylval.STRING = strdup(yytext); return IDENTIFIER; }
