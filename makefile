@@ -20,6 +20,9 @@ GENERATED_FILES := $(GENERATED_FOLDER)/$(FLEX_GENERATED) $(GENERATED_FOLDER)/$(B
 SOURCE_FILES	:= $(GENERATED_FILES) $(SOURCE_FOLDER)/*.cpp $(SOURCE_FOLDER)/**/*.cpp
 EXECUTABLE		:= compiler
 
+FILE_IN			:= $(TEST_FOLDER)/test.mc
+FILE_OUT		:= a.asm
+
 
 all: compiler
 
@@ -42,6 +45,10 @@ clean:
 
 test:
 	@$(MAKE) all -s
-	@./$(EXECUTABLE) < $(TEST_FOLDER)/test.code
+	@./$(EXECUTABLE) < $(FILE_IN)
+
+out:
+	@$(MAKE) all -s
+	@./$(EXECUTABLE) < $(FILE_IN) > $(FILE_OUT)
 
 .PHONY: test
