@@ -8,3 +8,4 @@
 #include "ast/OpPlusNode.hpp"
 #include "ast/PrintNode.hpp"
 #include "ast/StatementsNode.hpp"
+#include "ast/WhileNode.hpp"

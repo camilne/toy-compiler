@@ -129,6 +129,27 @@ void MipsGenerator::generate(StatementsNode& node) {
         node.getStatement()->accept(*this);
 }
 
+void MipsGenerator::generate(WhileNode& node) {
+    add(std::make_shared<MipsComment>(node.toCode()));
+
+    if(!node.getExpression()) {
+        add(std::make_shared<MipsComment>("No expression in while"));
+        return;
+    }
+
+    std::string whileId = uniqueId();
+    std::string whileTop = "while_top_" + whileId;
+    std::string whileEnd = "while_end_" + whileId;
+
+    add(std::make_shared<MipsLabel>(whileTop));
+    node.getExpression()->accept(*this);
+    add(std::make_shared<MipsBranchEqual>(tmpRegCounter, 0, whileEnd));
+    if(node.getStatements())
+        node.getStatements()->accept(*this);
+    add(std::make_shared<MipsJump>(whileTop));
+    add(std::make_shared<MipsLabel>(whileEnd));
+}
+
 void MipsGenerator::optimize() {
     // Remove trailing pops if register is unused after
     std::vector<int> popRegisters(NUM_REGISTERS);
@@ -284,4 +305,23 @@ int MipsGenerator::getAddrOfIdentifier(std::string identifier) {
     savedVariableMapping[addr] = identifier;
 
     return addr;
+}
+
+std::string MipsGenerator::uniqueId() {
+    static int currentId = 1;
+    static const char ALPHABET[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    };
+    static const int ALPHABET_LENGTH = sizeof(ALPHABET) / sizeof(char);
+
+    std::vector<char> encoded;
+    int id = currentId++;
+
+    do {
+        encoded.push_back(ALPHABET[id % ALPHABET_LENGTH]);
+        id /= ALPHABET_LENGTH;
+    } while(id > 0);
+
+    return std::string(encoded.begin(), encoded.end());
 }

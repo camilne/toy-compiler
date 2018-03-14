@@ -13,6 +13,7 @@ class OpMultiplyNode;
 class OpPlusNode;
 class PrintNode;
 class StatementsNode;
+class WhileNode;
 
 class IGenerator {
 public:
@@ -26,6 +27,7 @@ public:
     virtual void generate(OpPlusNode&     node) = 0;
     virtual void generate(PrintNode&      node) = 0;
     virtual void generate(StatementsNode& node) = 0;
+    virtual void generate(WhileNode&      node) = 0;
 
     virtual void optimize() {
         // Empty

@@ -30,7 +30,7 @@
 
 %token <STRING> IDENTIFIER
 %token <INT> INTEGER
-%token SEMICOLON PRINT_KEYWORD LEFT_PAREN RIGHT_PAREN
+%token SEMICOLON PRINT_KEYWORD WHILE_KEYWORD LEFT_PAREN RIGHT_PAREN LEFT_BRACE RIGHT_BRACE
 
 %precedence ASSIGNMENT
 %left OP_PLUS OP_MINUS
@@ -50,6 +50,8 @@ statements:
 
 statement:
     PRINT_KEYWORD expression SEMICOLON          { $$ = new PrintNode($2); }
+    | WHILE_KEYWORD LEFT_PAREN expression RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
+                                                { $$ = new WhileNode($3, $6); }
     | expression SEMICOLON                      { $$ = $1; }
 
 expression:

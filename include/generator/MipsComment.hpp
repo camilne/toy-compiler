@@ -4,6 +4,7 @@
 #include "generator/MipsStatement.hpp"
 #include "generator/MipsUtil.hpp"
 #include <sstream>
+#include <algorithm>
 
 class MipsComment : public MipsStatement {
 public:
@@ -12,8 +13,11 @@ public:
     {}
 
     virtual std::string toCode() const override {
+        std::string stripped = content;
+        std::replace(stripped.begin(), stripped.end(), '\n', ' ');
+
         std::stringstream ss;
-        ss << "# " << content << "\n";
+        ss << "# " << stripped << "\n";
         return ss.str();
     }
 

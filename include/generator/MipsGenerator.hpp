@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
+#include <unordered_set>
 
 /**
 Generates mips32 code from a {@link SyntaxTree}.
@@ -35,6 +36,7 @@ public:
     virtual void generate(OpPlusNode&     node) override;
     virtual void generate(PrintNode&      node) override;
     virtual void generate(StatementsNode& node) override;
+    virtual void generate(WhileNode&      node) override;
 
     virtual void optimize() override;
 
@@ -62,6 +64,8 @@ private:
     std::unordered_map<std::string, int> variables;
     /// Holds the registers and what variable address is currently mapped to them (if any).
     std::vector<std::string> savedVariableMapping;
+    /// Holds generated label ids to guarantee uniqueness.
+    std::unordered_set<std::string> generatedLabelIds;
 
     /**
     Return the tmp register offset from <tt>tmpRegCounter</tt>. The offset will wrap around the registers if it goes out of range.
@@ -164,6 +168,8 @@ private:
     void add(std::shared_ptr<MipsStatement>&& statement);
 
     int getAddrOfIdentifier(std::string identifier);
+
+    std::string uniqueId();
     /**
     Append a mips op statement to the end of the current statements. Uses the previous and current tmp registers as source and the previous tmp register as the desination.
 
