@@ -21,6 +21,8 @@ public:
         for(int& i : regUse) {
             i = 0;
         }
+
+        savedVariableMapping.resize(NUM_REGISTERS);
     }
 
     virtual void generate(AssignmentNode& node) override;
@@ -58,6 +60,8 @@ private:
     std::vector<std::shared_ptr<MipsStatement>> mipsStatements;
     /// Holds the declared variables and type (unused for now)
     std::unordered_map<std::string, int> variables;
+    /// Holds the registers and what variable address is currently mapped to them (if any).
+    std::vector<std::string> savedVariableMapping;
 
     /**
     Return the tmp register offset from <tt>tmpRegCounter</tt>. The offset will wrap around the registers if it goes out of range.
@@ -158,6 +162,8 @@ private:
     @param statement An instance of the statement to add.
     */
     void add(std::shared_ptr<MipsStatement>&& statement);
+
+    int getAddrOfIdentifier(std::string identifier);
     /**
     Append a mips op statement to the end of the current statements. Uses the previous and current tmp registers as source and the previous tmp register as the desination.
 

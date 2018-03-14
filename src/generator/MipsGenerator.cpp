@@ -12,34 +12,32 @@ void MipsGenerator::generate(AssignmentNode& node) {
         return;
     }
 
-    node.getExpression()->accept(*this);
-
     if(!node.getIdentifier()) {
         std::cerr << "Assignment has no identifier: " << node.toCode() << std::endl;
         return;
     }
 
+    node.getExpression()->accept(*this);
+
     std::string identifier = node.getIdentifier()->getName();
 
     variables[identifier] = 0;
 
-    auto addr = nextSaveAndPush();
-    add(std::make_shared<MipsLoadAddress>(addr, identifier));
+    auto addr = getAddrOfIdentifier(identifier);
     add(std::make_shared<MipsStore>(getTmpOffset(0), addr));
 }
 
 void MipsGenerator::generate(IdentifierNode& node) {
     add(std::make_shared<MipsComment>("Identifier " + node.toCode()));
 
-    std::string name = node.getName();
+    std::string identifier = node.getName();
 
-    if(variables.find(name) == variables.end()) {
-        std::cerr << "Identifier [" << name << "] has not been declared" << std::endl;
+    if(variables.find(identifier) == variables.end()) {
+        std::cerr << "Identifier [" << identifier << "] has not been declared" << std::endl;
         return;
     }
 
-    auto addr = nextSaveAndPush();
-    add(std::make_shared<MipsLoadAddress>(addr, name));
+    auto addr = getAddrOfIdentifier(identifier);
     auto dest = nextTmpAndPush();
     add(std::make_shared<MipsLoad>(dest, addr));
 }
@@ -274,4 +272,16 @@ void MipsGenerator::add(std::shared_ptr<MipsStatement>&& statement) {
         return;
 
     mipsStatements.emplace_back(statement);
+}
+
+int MipsGenerator::getAddrOfIdentifier(std::string identifier) {
+    for(unsigned int i = 0; i < savedVariableMapping.size(); i++)
+        if(savedVariableMapping[i] == identifier)
+            return i;
+
+    auto addr = nextSaveAndPush();
+    add(std::make_shared<MipsLoadAddress>(addr, identifier));
+    savedVariableMapping[addr] = identifier;
+
+    return addr;
 }
