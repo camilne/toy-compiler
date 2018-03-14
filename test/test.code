@@ -1,3 +1,4 @@
+// operation tests
 print 1 + 2;
 print 1 + (2 + (3 + (4 + (5 + (6 + (7 + (8 + 9)))))));
 print 5 - 17;
@@ -7,6 +8,7 @@ print -4 + 3 * -2;
 
 print 11111111;
 
+// basic variable tests
 a = 3;
 print a;
 a = a + 5;
@@ -16,6 +18,7 @@ print a;
 
 print 22222222;
 
+// multi-variable tests
 my_test1 = 144;
 my_test2 = my_test1;
 my_test2 = my_test2 * 2;
@@ -25,6 +28,7 @@ print my_test2;
 
 print 33333333;
 
+// Fibonacci sequence (while loop construction)
 i = 10;
 a = 0;
 b = 1;
