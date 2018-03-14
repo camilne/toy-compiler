@@ -167,7 +167,7 @@ const std::string& MipsGenerator::getCode() {
         std::stringstream ss;
         ss << ".data\n";
         for(std::pair<std::string, int> identifier : variables) {
-            ss << identifier.first << ": .word\n";
+            ss << identifier.first << ": .word 0\n";
         }
         ss << ".text\n";
         for(std::shared_ptr<MipsStatement>& statement : mipsStatements) {

@@ -43,8 +43,8 @@ private:
     static const int NUM_SAVED_REGISTERS = 8;
     /// The number of tmp registers on a mips machine.
     static const int NUM_TMP_REGISTERS = 8;
-    /// The total number of tmp registers on a mips machine.
-    static const int NUM_REGISTERS = NUM_SAVED_REGISTERS + NUM_TMP_REGISTERS;
+    /// The total number of registers on a mips machine.
+    static const int NUM_REGISTERS = 32;
 
     /// If the compiler should generate comments in the assembly.
     bool debug;
