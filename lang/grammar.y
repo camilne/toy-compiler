@@ -19,9 +19,9 @@
 %}
 
 %union {
-    int                                 INT;
-    const char*                         STRING;
-    class SyntaxTreeNode*   NODE;
+    int                             INT;
+    const char*                     STRING;
+    class SyntaxTreeNode*           NODE;
 }
 
 %type <NODE> statements
@@ -32,6 +32,7 @@
 %token <INT> INTEGER
 %token SEMICOLON PRINT_KEYWORD LEFT_PAREN RIGHT_PAREN
 
+%precedence ASSIGNMENT
 %left OP_PLUS OP_MINUS
 %left OP_MUL OP_DIV
 %precedence NEG
@@ -53,6 +54,7 @@ statement:
 
 expression:
       OP_MINUS expression %prec NEG             { $$ = new OpMinusNode(new IntegerNode(0), $2); }
+    | IDENTIFIER ASSIGNMENT expression          { $$ = new AssignmentNode(new IdentifierNode($1), $3); }
     | expression OP_DIV expression              { $$ = new OpDivideNode($1, $3); }
     | expression OP_MUL expression              { $$ = new OpMultiplyNode($1, $3); }
     | expression OP_PLUS expression             { $$ = new OpPlusNode($1, $3); }

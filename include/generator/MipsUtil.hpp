@@ -9,10 +9,14 @@ using byte = uint8_t;
 
 class MipsUtil {
 public:
+    /// The register number of the first saved register.
+    static const int SAVE_BEGIN = 1;
+    /// The register number 1 after the last saved register.
+    static const int SAVE_END = 9;
     /// The register number of the first tmp register.
-    static const int TMP_BEGIN = 8;
+    static const int TMP_BEGIN = 9;
     /// The register number 1 after the last tmp register.
-    static const int TMP_END = 16;
+    static const int TMP_END = 17;
 
     static std::string toHex(word val);
     static std::string toRegister(int val);

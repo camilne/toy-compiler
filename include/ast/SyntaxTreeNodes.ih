@@ -1,3 +1,4 @@
+#include "ast/AssignmentNode.hpp"
 #include "ast/IdentifierNode.hpp"
 #include "ast/InitNode.hpp"
 #include "ast/IntegerNode.hpp"

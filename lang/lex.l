@@ -11,10 +11,10 @@ PRINT_KEYWORD           print
 
 %%
 
-{PRINT_KEYWORD}                 return PRINT_KEYWORD;
-{IDENTIFIER}                    { yylval.STRING = yytext; return IDENTIFIER; }
-{INTEGER}                       { yylval.INT = atoi(yytext); return INTEGER; }
 {WHITESPACE}                    /* Empty */
+{PRINT_KEYWORD}                 return PRINT_KEYWORD;
+{IDENTIFIER}                    { yylval.STRING = strdup(yytext); return IDENTIFIER; }
+{INTEGER}                       { yylval.INT = atoi(yytext); return INTEGER; }
 {LINEFEED}                      ++yylineno;
 ";"                             return SEMICOLON;
 "/"                             return OP_DIV;
@@ -23,6 +23,7 @@ PRINT_KEYWORD           print
 "-"                             return OP_MINUS;
 "("                             return LEFT_PAREN;
 ")"                             return RIGHT_PAREN;
+"="                             return ASSIGNMENT;
 .                               { printf("unexpected character: %s", yytext); }
 
 %%

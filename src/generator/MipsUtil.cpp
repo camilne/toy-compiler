@@ -11,8 +11,11 @@ std::string MipsUtil::toHex(word val) {
 
 // static
 std::string MipsUtil::toRegister(int val) {
-    std::string strVal = std::to_string(val - TMP_BEGIN);
-    if(val >= TMP_BEGIN && val < TMP_END)
-        return "$t" + strVal;
-    return "$INVALID(" + strVal + ")";
+    if(val == 0)
+        return "$zero";
+    else if(val >= TMP_BEGIN && val < TMP_END)
+        return "$t" + std::to_string(val - TMP_BEGIN);
+    else if(val >= SAVE_BEGIN && val < SAVE_END)
+        return "$s" + std::to_string(val - SAVE_BEGIN);
+    return "$INVALID(" + std::to_string(val) + ")";
 }

@@ -3,6 +3,7 @@
 
 #include <string>
 
+class AssignmentNode;
 class IdentifierNode;
 class InitNode;
 class IntegerNode;
@@ -15,6 +16,7 @@ class StatementsNode;
 
 class IGenerator {
 public:
+    virtual void generate(AssignmentNode& node) = 0;
     virtual void generate(IdentifierNode& node) = 0;
     virtual void generate(InitNode&       node) = 0;
     virtual void generate(IntegerNode&    node) = 0;
