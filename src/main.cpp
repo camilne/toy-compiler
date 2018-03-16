@@ -22,6 +22,8 @@ int main(int argc, char** argv) {
         outputFile = arg;
     });
     arguments.process();
+    if(arguments.fail())
+        return 1;
 
     // TEMP: only process the first input file given
     if(arguments.getAnonymousArgs().size() > 0) {
@@ -32,6 +34,7 @@ int main(int argc, char** argv) {
             yyin = fopen(fileName.c_str(), "r");
         } else {
             std::cerr << "Invalid input file " << fileName << std::endl;
+            return 2;
         }
     }
 

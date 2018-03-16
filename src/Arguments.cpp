@@ -7,7 +7,8 @@ const std::string Arguments::FLAG_PREFIX = "-";
 // static
 const std::string Arguments::VERBOSE_FLAG_PREFIX = "--";
 
-Arguments::Arguments(int argc, char** argv) {
+Arguments::Arguments(int argc, char** argv)
+    : good(true) {
     args.resize(argc);
     for(int i = 0; i < argc; i++) {
         args[i] = argv[i];
@@ -27,7 +28,7 @@ const std::vector<std::string>& Arguments::getAnonymousArgs() const {
 }
 
 void Arguments::process() {
-    for(auto it = args.begin(); it != args.end(); ++it) {
+    for(auto it = args.begin(); it != args.end() && good; ++it) {
         if(isFlag(*it)) {
             if(noArgFlags.find(*it) != noArgFlags.end()) {
                 noArgFlags[*it]();
@@ -39,11 +40,16 @@ void Arguments::process() {
                 }
             } else {
                 std::cerr << "Unknown flag " << *it << std::endl;
+                good = false;
             }
         } else if(it != args.begin()) {
             anonArgs.push_back(*it);
         }
     }
+}
+
+bool Arguments::fail() const {
+    return !good;
 }
 
 bool Arguments::isFlag(const std::string& flag) const {
@@ -57,16 +63,24 @@ bool Arguments::hasFlag(const std::string& flag) const {
     return std::find(args.begin(), args.end(), flag) != args.end();
 }
 
-std::string Arguments::getArg(const std::string& flag) const {
+std::string Arguments::getArg(const std::string& flag) {
     auto it = std::find(args.begin(), args.end(), flag);
     if(it == args.end()) {
         std::cerr << "Unknown flag " << flag << std::endl;
+        good = false;
         return "";
     }
 
     ++it;
     if(it == args.end()) {
         std::cerr << "Flag " << flag << " does not have an argument" << std::endl;
+        good = false;
+        return "";
+    }
+
+    if(isFlag(*it)) {
+        std::cerr << "Flag " << flag << " cannot take flag " << *it << " as an argument" << std::endl;
+        good = false;
         return "";
     }
 

@@ -16,10 +16,12 @@ public:
     const std::vector<std::string>& getAnonymousArgs() const;
 
     void process();
+    bool fail() const;
 private:
     const static std::string FLAG_PREFIX;
     const static std::string VERBOSE_FLAG_PREFIX;
 
+    bool good;
     std::vector<std::string> args;
     std::vector<std::string> anonArgs;
     std::unordered_map<std::string, std::function<void()>> noArgFlags;
@@ -27,7 +29,7 @@ private:
 
     bool isFlag(const std::string& flag) const;
     bool hasFlag(const std::string& flag) const;
-    std::string getArg(const std::string& flag) const;
+    std::string getArg(const std::string& flag);
 };
 
 #endif
