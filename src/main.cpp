@@ -2,24 +2,27 @@
 #include "../generated/grammar.tab.h"
 #include "ast/SyntaxTree.hpp"
 #include "generator/MipsGenerator.hpp"
+#include "Arguments.hpp"
+#include <vector>
 
 extern int yylex();
 extern SyntaxTree* ast;
 
-//#define LEXER_OUTPUT
+int main(int argc, char** argv) {
+    bool verbose = false;
 
-int main() {
-#ifdef LEXER_OUTPUT
-    while(int token = yylex()) {
-        std::cout << "Token: " << token << std::endl;
-    }
-    return 0;
-#else
+    Arguments arguments(argc, argv);
+    arguments.registerFlag("-v", [&](){
+        std::cout << "setting verbose" << std::endl;
+        verbose = true;
+    });
+    arguments.process();
+
     int result = yyparse();
     if(result)
         std::cout << "This input is invalid." << std::endl;
     else {
-        MipsGenerator generator(true);
+        MipsGenerator generator(verbose);
         ast->accept(generator);
 
         generator.optimize();
@@ -28,5 +31,4 @@ int main() {
     }
 
     return result;
-#endif
 }
