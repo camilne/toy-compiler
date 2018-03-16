@@ -13,14 +13,13 @@ int main(int argc, char** argv) {
 
     Arguments arguments(argc, argv);
     arguments.registerFlag("-v", [&](){
-        std::cout << "setting verbose" << std::endl;
         verbose = true;
     });
     arguments.process();
 
     int result = yyparse();
     if(result)
-        std::cout << "This input is invalid." << std::endl;
+        std::cerr << "This input is invalid." << std::endl;
     else {
         MipsGenerator generator(verbose);
         ast->accept(generator);
