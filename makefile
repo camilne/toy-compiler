@@ -49,6 +49,6 @@ test:
 
 out:
 	@$(MAKE) all -s
-	@./$(EXECUTABLE) < $(FILE_IN) > $(FILE_OUT)
+	@./$(EXECUTABLE) -o $(FILE_OUT) $(FILE_IN)
 
 .PHONY: test

@@ -7,6 +7,7 @@
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
+#include <string>
 
 /**
 Generates mips32 code from a {@link SyntaxTree}.
@@ -49,6 +50,10 @@ private:
     static const int NUM_TMP_REGISTERS = 8;
     /// The total number of registers on a mips machine.
     static const int NUM_REGISTERS = 32;
+    /// The prefix for generated identifiers.
+    static const std::string IDENTIFIER_PREFIX;
+    /// The prefix for generated labels.
+    static const std::string LABEL_PREFIX;
 
     /// If the compiler should generate comments in the assembly.
     bool debug;

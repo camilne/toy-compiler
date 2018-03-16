@@ -4,6 +4,11 @@
 #include <sstream>
 #include <iostream>
 
+// static
+const std::string MipsGenerator::IDENTIFIER_PREFIX = "__identifier__";
+// static
+const std::string MipsGenerator::LABEL_PREFIX = "__label__";
+
 void MipsGenerator::generate(AssignmentNode& node) {
     add(std::make_shared<MipsComment>(node.toCode()));
 
@@ -19,7 +24,7 @@ void MipsGenerator::generate(AssignmentNode& node) {
 
     node.getExpression()->accept(*this);
 
-    std::string identifier = node.getIdentifier()->getName();
+    std::string identifier = IDENTIFIER_PREFIX + node.getIdentifier()->getName();
 
     variables[identifier] = 0;
 
@@ -30,7 +35,7 @@ void MipsGenerator::generate(AssignmentNode& node) {
 void MipsGenerator::generate(IdentifierNode& node) {
     add(std::make_shared<MipsComment>("Identifier " + node.toCode()));
 
-    std::string identifier = node.getName();
+    std::string identifier = IDENTIFIER_PREFIX + node.getName();
 
     if(variables.find(identifier) == variables.end()) {
         std::cerr << "Identifier [" << identifier << "] has not been declared" << std::endl;
@@ -138,8 +143,8 @@ void MipsGenerator::generate(WhileNode& node) {
     }
 
     std::string whileId = uniqueId();
-    std::string whileTop = "while_top_" + whileId;
-    std::string whileEnd = "while_end_" + whileId;
+    std::string whileTop = LABEL_PREFIX + "while_top_" + whileId;
+    std::string whileEnd = LABEL_PREFIX + "while_end_" + whileId;
 
     add(std::make_shared<MipsLabel>(whileTop));
     node.getExpression()->accept(*this);
