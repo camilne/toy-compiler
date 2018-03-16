@@ -22,7 +22,7 @@ void Arguments::registerFlag(std::string flag, std::function<void(std::string)> 
     oneArgFlags[flag] = predicate;
 }
 
-std::vector<std::string> Arguments::getAnonymousArgs() const {
+const std::vector<std::string>& Arguments::getAnonymousArgs() const {
     return anonArgs;
 }
 
@@ -40,7 +40,7 @@ void Arguments::process() {
             } else {
                 std::cerr << "Unknown flag " << *it << std::endl;
             }
-        } else {
+        } else if(it != args.begin()) {
             anonArgs.push_back(*it);
         }
     }

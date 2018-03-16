@@ -13,7 +13,7 @@ public:
     void registerFlag(std::string flag, std::function<void()> predicate);
     void registerFlag(std::string flag, std::function<void(std::string)> predicate);
 
-    std::vector<std::string> getAnonymousArgs() const;
+    const std::vector<std::string>& getAnonymousArgs() const;
 
     void process();
 private:
