@@ -3,6 +3,7 @@ INCLUDE_FOLDER		:= include
 SOURCE_FOLDER			:= src
 TEST_FOLDER				:= test
 GENERATED_FOLDER	:= generated
+EXAMPLES_FOLDER		:= examples
 
 CXX								:= g++
 CXXFLAGS					:= -std=c++14 -g3 -Wall -Wextra -I $(INCLUDE_FOLDER)
@@ -22,7 +23,7 @@ TEST_FILES				:= $(GENERATED_FILES) $(SOURCE_FOLDER)/**/*.cpp $(SOURCE_FOLDER)/A
 EXECUTABLE				:= compiler
 TEST_EXECUTABLE		:= tests
 
-FILE_IN						:= $(TEST_FOLDER)/test.mc
+FILE_IN						:= $(EXAMPLES_FOLDER)/everything.mc
 FILE_OUT					:= a.asm
 
 
