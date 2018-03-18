@@ -5,13 +5,19 @@ This is a toy compiler that I am working on. It is written in C++. It uses the f
 
 * flex      (lexer)
 * bison     (parser)
+* CMake     (build system)
 
 The goal of this project is to turn a toy C-like language (miniC) into MIPS32 assembly. The output will then be assembled (with an assembler written by me) into machine code. This machine code can then run on a virtual machine (also created by me). It is an exercise with compilers and computer architecture.
 
 Compilation
 -----------
 
-To build the project, make sure you have the libraries installed then run `make`. This will generate an executable called *compiler*. This accepts a program through `stdin` and outputs the compiled program to `stdout`.
+To build the project, run the following command from the root directory:
+```
+mkdir build && cd build && cmake .. && make
+```
+
+This will generate an executable called *compiler* and an executable called *tests*. The program *compiler* accepts a program through `stdin` and outputs the compiled program to `stdout`.
 
 The compiler currently supports a few command line options:
 
@@ -25,9 +31,11 @@ Flag         | Name    | Argument(s)  | Description
 Testing
 -------
 
-Run `make test` to run tests.
-
-Run `make out` (outputs to `a.asm`) to build the project and run some sample code through the compiler.
+To generate tests, run the following command from inside the build directory:
+```
+cmake .. -Dtests=ON && make
+```
+Then, run the *compiler_tests* executable to run unit tests.
 
 Documentation
 -------------

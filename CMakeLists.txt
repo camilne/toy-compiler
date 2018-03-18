@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.7)
 project(compiler)
 
+option(tests "Build tests" OFF)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -Wall -Wextra")
@@ -46,8 +48,6 @@ set(INCLUDE_FILES
   include/generator/MipsUtil.hpp
 )
 
-set(TEST_INCLUDE_FILES ${INCLUDE_FILES} include/catch.hpp)
-
 set(LIB_SOURCE_FILES
   src/Arguments.cpp
   src/ast/AssignmentNode.cpp
@@ -67,8 +67,6 @@ set(LIB_SOURCE_FILES
 
 set(SOURCE_FILES src/main.cpp)
 
-set(TEST_SOURCE_FILES test/lexer.cpp test/main.cpp)
-
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
@@ -76,13 +74,19 @@ BISON_TARGET(Parser ${CMAKE_CURRENT_SOURCE_DIR}/lang/grammar.y ${CMAKE_CURRENT_B
 FLEX_TARGET(Lexer ${CMAKE_CURRENT_SOURCE_DIR}/lang/lex.l  ${CMAKE_CURRENT_BINARY_DIR}/lexer.yy.c)
 ADD_FLEX_BISON_DEPENDENCY(Lexer Parser)
 
-set_source_files_properties(${BISON_Parser_OUTPUT_SOURCE} PROPERTIES LANGUAGE CXX )
-set_source_files_properties(${FLEX_Lexer_OUTPUTS} PROPERTIES LANGUAGE CXX )
+set_source_files_properties(${BISON_Parser_OUTPUT_SOURCE} PROPERTIES LANGUAGE CXX)
+set_source_files_properties(${FLEX_Lexer_OUTPUTS} PROPERTIES LANGUAGE CXX)
 
 set(GENERATED_FILES ${BISON_Parser_OUTPUTS} ${FLEX_Lexer_OUTPUTS})
 
 add_library(compiler_lib ${INCLUDE_FILES} ${LIB_SOURCE_FILES} ${GENERATED_FILES})
 add_executable(compiler ${INCLUDE_FILES} ${SOURCE_FILES})
 target_link_libraries(compiler compiler_lib)
-add_executable(tests ${TEST_INCLUDE_FILES} ${TEST_SOURCE_FILES})
-target_link_libraries(tests compiler_lib)
+
+if(${tests})
+  set(TEST_INCLUDE_FILES ${INCLUDE_FILES} include/catch.hpp)
+  set(TEST_SOURCE_FILES test/lexer.cpp test/main.cpp)
+
+  add_executable(compiler_tests ${TEST_INCLUDE_FILES} ${TEST_SOURCE_FILES})
+  target_link_libraries(compiler_tests compiler_lib)
+endif()
