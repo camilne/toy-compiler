@@ -17,7 +17,7 @@ To build the project, run the following command from the root directory:
 mkdir build && cd build && cmake .. && make
 ```
 
-This will generate an executable called *compiler* and an executable called *tests*. The program *compiler* accepts a program through `stdin` and outputs the compiled program to `stdout`.
+This will generate an executable called *compiler* which accepts a program through `stdin` and outputs the compiled program to `stdout`.
 
 The compiler currently supports a few command line options:
 
@@ -35,7 +35,7 @@ To generate tests, run the following command from inside the build directory:
 ```
 cmake .. -Dtests=ON && make
 ```
-Then, run the *compiler_tests* executable to run unit tests.
+Then, run the generated *compiler_tests* executable to run unit tests.
 
 Documentation
 -------------
