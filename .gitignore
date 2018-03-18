@@ -1,4 +1,5 @@
 compiler
+tests
 generated/
 docs/
 a.asm
