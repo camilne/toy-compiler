@@ -1,6 +1,6 @@
 %option noyywrap
 %{
-#include "../generated/grammar.tab.h"
+#include "grammar.tab.h"
 %}
 
 IDENTIFIER              [_a-zA-Z][_a-zA-Z0-9]*

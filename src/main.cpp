@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../generated/grammar.tab.h"
+#include "grammar.tab.h"
 #include "ast/SyntaxTree.hpp"
 #include "generator/MipsGenerator.hpp"
 #include "Arguments.hpp"

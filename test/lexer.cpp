@@ -1,5 +1,5 @@
 #include "catch.hpp"
-#include "../generated/grammar.tab.h"
+#include "grammar.tab.h"
 #include <vector>
 #include <string>
 #include <array>
