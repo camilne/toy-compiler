@@ -36,6 +36,9 @@ int main(int argc, char** argv) {
             std::cerr << "Invalid input file " << fileName << std::endl;
             return 2;
         }
+    } else {
+      std::cerr << "Must specify at least one input file" << std::endl;
+      return 3;
     }
 
     int result = yyparse();
