@@ -3,8 +3,9 @@
 #include "grammar.tab.h"
 %}
 
-IDENTIFIER              [_a-zA-Z][_a-zA-Z0-9]*
-INTEGER                 [0-9]+
+IDENTIFIER              [_[:alpha:]][_[:alnum:]]*
+INTEGER                 [[:digit:]]+
+INVALID_IDENTIFIER      [[:digit:]]+[_[:alnum:]]+
 WHITESPACE              [ \r\t\v\f]
 LINEFEED                \n
 PRINT_KEYWORD           print
@@ -19,8 +20,9 @@ BLOCK_COMMENT           "/*"[^*]*[*]+([^*/][^*]*[*]+)*[/]
 {BLOCK_COMMENT}                 /* Empty */
 {PRINT_KEYWORD}                 return PRINT_KEYWORD;
 {WHILE_KEYWORD}                 return WHILE_KEYWORD;
-{IDENTIFIER}                    { yylval.STRING = strdup(yytext); return IDENTIFIER; }
 {INTEGER}                       { yylval.INT = atoi(yytext); return INTEGER; }
+{INVALID_IDENTIFIER}            { yylval.STRING = strdup(yytext); return INVALID_IDENTIFIER; }
+{IDENTIFIER}                    { yylval.STRING = strdup(yytext); return IDENTIFIER; }
 {LINEFEED}                      ++yylineno;
 ";"                             return SEMICOLON;
 "/"                             return OP_DIV;
@@ -32,6 +34,6 @@ BLOCK_COMMENT           "/*"[^*]*[*]+([^*/][^*]*[*]+)*[/]
 "{"                             return LEFT_BRACE;
 "}"                             return RIGHT_BRACE;
 "="                             return ASSIGNMENT;
-.                               { printf("unexpected character: %s", yytext); }
+.                               { yylval.STRING = strdup(yytext); return UNKNOWN; }
 
 %%

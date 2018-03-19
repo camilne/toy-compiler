@@ -105,3 +105,46 @@ TEST_CASE("tokenizes integers", "[lexer]") {
     }
   }
 }
+
+TEST_CASE("tokenizes identifiers", "[lexer]") {
+  static const std::string source = "a f z A F Z a0 a5 a9 _a a_ __afzAFZ09__";
+
+  SECTION("type") {
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 12);
+    for(unsigned int i = 0; i < tokens.size(); i++) {
+      REQUIRE(tokens[i] == yytokentype::IDENTIFIER);
+    }
+  }
+
+  SECTION("value") {
+    yy_scan_string(source.c_str());
+    std::array<std::string, 12> values = {"a", "f", "z", "A", "F", "Z", "a0", "a5", "a9", "_a", "a_", "__afzAFZ09__"};
+    for(auto it = values.begin(); it != values.end() && yylex(); ++it) {
+      REQUIRE(*it == yylval.STRING);
+    }
+  }
+
+  SECTION("invalid") {
+    static const std::string invalid = "0a $a #a @a";
+    static const std::string identifier = "a";
+
+    std::vector<int> tokens = lexString(invalid);
+    yy_scan_string(invalid.c_str());
+
+    for(unsigned int i = 0; i < tokens.size() && yylex(); i++) {
+      switch(tokens[i]) {
+      case yytokentype::IDENTIFIER:
+        REQUIRE(yylval.STRING == identifier);
+        break;
+      case yytokentype::INVALID_IDENTIFIER:
+      case yytokentype::UNKNOWN:
+        break;
+      default:
+        INFO("Invalid token");
+        REQUIRE(i == 0);
+      }
+    }
+  }
+}
