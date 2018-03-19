@@ -26,9 +26,9 @@ BLOCK_COMMENT           "/*"[^*]*[*]+([^*/][^*]*[*]+)*[/]
 {LINEFEED}                      ++yylineno;
 ";"                             return SEMICOLON;
 "/"                             return OP_DIV;
+"-"                             return OP_MINUS;
 "*"                             return OP_MUL;
 "+"                             return OP_PLUS;
-"-"                             return OP_MINUS;
 "("                             return LEFT_PAREN;
 ")"                             return RIGHT_PAREN;
 "{"                             return LEFT_BRACE;

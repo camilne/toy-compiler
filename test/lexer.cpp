@@ -179,3 +179,125 @@ TEST_CASE("ignores comments", "[lexer]") {
     REQUIRE(yylval.STRING == identifier2);
   }
 }
+
+TEST_CASE("tokenizes keywords", "[lexer]") {
+  SECTION("print") {
+    static const std::string source = "print";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::PRINT_KEYWORD);
+  }
+
+  SECTION("while") {
+    static const std::string source = "while";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::WHILE_KEYWORD);
+  }
+}
+
+TEST_CASE("tokenizes symbols", "[lexer]") {
+  SECTION("semicolon") {
+    static const std::string source = ";";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::SEMICOLON);
+  }
+
+  SECTION("op div") {
+    static const std::string source = "/";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::OP_DIV);
+  }
+
+  SECTION("op minus") {
+    static const std::string source = "-";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::OP_MINUS);
+  }
+
+  SECTION("op multiply") {
+    static const std::string source = "*";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::OP_MUL);
+  }
+
+  SECTION("op plus") {
+    static const std::string source = "+";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::OP_PLUS);
+  }
+
+  SECTION("left parenthese") {
+    static const std::string source = "(";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::LEFT_PAREN);
+  }
+
+  SECTION("right parenthese") {
+    static const std::string source = ")";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::RIGHT_PAREN);
+  }
+
+  SECTION("left brace") {
+    static const std::string source = "{";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::LEFT_BRACE);
+  }
+
+  SECTION("right brace") {
+    static const std::string source = "}";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::RIGHT_BRACE);
+  }
+
+  SECTION("assignment") {
+    static const std::string source = "=";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::ASSIGNMENT);
+  }
+}
+
+TEST_CASE("tokenizes unknown characters", "[lexer]") {
+  static const std::string source = "!@#$%^&";
+
+  std::vector<int> tokens = lexString(source);
+
+  for(auto& token : tokens) {
+    REQUIRE(token == yytokentype::UNKNOWN);
+  }
+}
