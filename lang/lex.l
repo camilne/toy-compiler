@@ -5,7 +5,7 @@
 
 IDENTIFIER              [_[:alpha:]][_[:alnum:]]*
 INTEGER                 [[:digit:]]+
-INVALID_IDENTIFIER      [[:digit:]]+[_[:alnum:]]+
+INVALID_IDENTIFIER      {INTEGER}{IDENTIFIER}
 WHITESPACE              [ \r\t\v\f]
 LINEFEED                \n
 PRINT_KEYWORD           print
