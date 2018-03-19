@@ -12,7 +12,7 @@ extern SyntaxTree* ast;
 
 int main(int argc, char** argv) {
     bool verbose = false;
-    std::string outputFile;
+    std::string outputFile = "a.asm";
 
     Arguments arguments(argc, argv);
     arguments.registerFlag("-v", [&](){
