@@ -1,6 +1,6 @@
 #include "catch.hpp"
 #include "grammar.tab.h"
-#include "ast/SyntaxTree.hpp"
+#include "ast/SyntaxTree.ih"
 #include <string>
 
 struct yy_buffer_state;
@@ -21,6 +21,7 @@ TEST_CASE("parses statements", "[parser]") {
 
     auto ast = parseString(source);
 
+    REQUIRE(ast);
     REQUIRE(ast->getRoot());
     REQUIRE(ast->getRoot()->getStatements() == nullptr);
   }
@@ -30,6 +31,7 @@ TEST_CASE("parses statements", "[parser]") {
 
     auto ast = parseString(source);
 
+    REQUIRE(ast);
     REQUIRE(ast->getRoot());
     REQUIRE(ast->getRoot()->getStatements());
   }
@@ -39,7 +41,21 @@ TEST_CASE("parses statements", "[parser]") {
 
     auto ast = parseString(source);
 
+    REQUIRE(ast);
     REQUIRE(ast->getRoot());
     REQUIRE(ast->getRoot()->getStatements());
+    REQUIRE(ast->getRoot()->getStatements()->getStatements());
+  }
+}
+
+TEST_CASE("parses statement", "[parser]") {
+  SECTION("print") {
+    static const std::string source = "print 1;";
+
+    auto ast = parseString(source);
+
+    auto printNode = ast->getRoot()->getStatements()->getStatementAs<PrintNode*>();
+    REQUIRE(printNode);
+    REQUIRE(printNode->getExp());
   }
 }
