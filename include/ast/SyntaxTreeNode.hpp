@@ -8,6 +8,7 @@ class IGenerator;
 class SyntaxTreeNode {
 public:
     virtual void accept(IGenerator& generator) = 0;
+    virtual std::string toString(int indent = 0) const = 0;
     virtual std::string toCode() const = 0;
 };
 

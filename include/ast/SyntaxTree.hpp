@@ -15,6 +15,10 @@ public:
         root->accept(generator);
     }
 
+    std::string toString() const {
+      return root->toString();
+    }
+
     const InitNode* getRoot() const {
       return root;
     }

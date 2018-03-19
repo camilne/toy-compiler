@@ -1,6 +1,8 @@
 #ifndef OP_PLUS_NODE_HPP
 #define OP_PLUS_NODE_HPP
 
+#include <sstream>
+#include <iomanip>
 #include "ast/SyntaxTreeNode.hpp"
 #include "generator/IGenerator.hpp"
 
@@ -14,6 +16,16 @@ public:
 
     virtual void accept(IGenerator& generator) {
         generator.generate(*this);
+    }
+
+    virtual std::string toString(int indent = 0) const {
+      std::stringstream ss;
+      ss << std::setw(indent) << " " << "OpPlusNodeNode\n";
+      if(leftExp)
+        ss << leftExp->toString(indent + 1);
+      if(rightExp)
+        ss << rightExp->toString(indent + 1);
+      return ss.str();
     }
 
     SyntaxTreeNode* getLeftExp() const {

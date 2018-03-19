@@ -1,13 +1,16 @@
 #ifndef STATEMENTS_NODE_HPP
 #define STATEMENTS_NODE_HPP
 
+#include <sstream>
+#include <iomanip>
 #include "ast/SyntaxTreeNode.hpp"
 #include "generator/IGenerator.hpp"
 
 class StatementsNode : public SyntaxTreeNode {
 public:
     StatementsNode(SyntaxTreeNode* statements, SyntaxTreeNode* statement)
-        : statements(statements), statement(statement)
+        : statements(dynamic_cast<StatementsNode*>(statements)),
+          statement(statement)
     {}
 
     virtual std::string toCode() const;
@@ -16,7 +19,17 @@ public:
         generator.generate(*this);
     }
 
-    SyntaxTreeNode* getStatements() const {
+    virtual std::string toString(int indent = 0) const {
+      std::stringstream ss;
+      ss << std::setw(indent) << " " << "StatementsNode\n";
+      if(statements)
+        ss << statements->toString(indent + 1);
+      if(statement)
+        ss << statement->toString(indent + 1);
+      return ss.str();
+    }
+
+    StatementsNode* getStatements() const {
         return statements;
     }
 
@@ -24,8 +37,13 @@ public:
         return statement;
     }
 
+    template <typename T>
+    T getStatementAs() const {
+      return dynamic_cast<T>(statement);
+    }
+
 private:
-    SyntaxTreeNode* statements;
+    StatementsNode* statements;
     SyntaxTreeNode* statement;
 };
 
