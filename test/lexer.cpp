@@ -148,3 +148,34 @@ TEST_CASE("tokenizes identifiers", "[lexer]") {
     }
   }
 }
+
+TEST_CASE("ignores comments", "[lexer]") {
+  SECTION("line") {
+    static const std::string source = "shown // ignore";
+    static const std::string identifier = "shown";
+
+    std::vector<int> tokens = lexString(source);
+    yy_scan_string(source.c_str());
+
+    REQUIRE(tokens.size() == 1);
+    yylex();
+    REQUIRE(yylval.STRING == identifier);
+  }
+
+  SECTION("block") {
+    static const std::string source = "shown /* ignored \n \n ignored \n ***/ also_shown";
+    static const std::string identifier1 = "shown";
+    static const std::string identifier2 = "also_shown";
+
+    std::vector<int> tokens = lexString(source);
+    yy_scan_string(source.c_str());
+
+    REQUIRE(tokens.size() == 2);
+    yylex();
+    INFO("Before block");
+    REQUIRE(yylval.STRING == identifier1);
+    yylex();
+    INFO("After block");
+    REQUIRE(yylval.STRING == identifier2);
+  }
+}
