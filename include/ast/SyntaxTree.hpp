@@ -2,20 +2,25 @@
 #define SYNTAX_TREE_HPP
 
 #include "ast/SyntaxTreeNode.hpp"
+#include "ast/InitNode.hpp"
 #include "generator/MipsGenerator.hpp"
 
 class SyntaxTree {
 public:
     explicit SyntaxTree(SyntaxTreeNode* root)
-        : root(root)
+        : root(dynamic_cast<InitNode*>(root))
     {}
 
     void accept(IGenerator& generator) {
         root->accept(generator);
     }
 
+    const InitNode* getRoot() const {
+      return root;
+    }
+
 private:
-    SyntaxTreeNode* root;
+    InitNode* root;
 };
 
 #endif
