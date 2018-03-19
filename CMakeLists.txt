@@ -85,7 +85,11 @@ target_link_libraries(compiler compiler_lib)
 
 if(${tests})
   set(TEST_INCLUDE_FILES ${INCLUDE_FILES} include/catch.hpp)
-  set(TEST_SOURCE_FILES test/lexer.cpp test/main.cpp)
+  set(TEST_SOURCE_FILES
+    test/grammar.cpp
+    test/lexer.cpp
+    test/main.cpp
+  )
 
   add_executable(compiler_tests ${TEST_INCLUDE_FILES} ${TEST_SOURCE_FILES})
   target_link_libraries(compiler_tests compiler_lib)
