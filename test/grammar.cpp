@@ -74,4 +74,18 @@ TEST_CASE("parses statement", "[parser]") {
     REQUIRE(integerNode);
     REQUIRE(integerNode->getValue() == 10);
   }
+
+  SECTION("identifier") {
+    static const std::string source = "id;";
+    static const std::string idName = "id";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto identifierNode = ast->getRoot()->getStatements()->getStatementAs<IdentifierNode*>();
+    REQUIRE(identifierNode);
+    REQUIRE(identifierNode->getName() == idName);
+  }
 }
