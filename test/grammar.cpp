@@ -54,8 +54,24 @@ TEST_CASE("parses statement", "[parser]") {
 
     auto ast = parseString(source);
 
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
     auto printNode = ast->getRoot()->getStatements()->getStatementAs<PrintNode*>();
     REQUIRE(printNode);
     REQUIRE(printNode->getExp());
+  }
+
+  SECTION("integer literal") {
+    static const std::string source = "10;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto integerNode = ast->getRoot()->getStatements()->getStatementAs<IntegerNode*>();
+    REQUIRE(integerNode);
+    REQUIRE(integerNode->getValue() == 10);
   }
 }
