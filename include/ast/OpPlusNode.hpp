@@ -20,7 +20,7 @@ public:
 
     virtual std::string toString(int indent = 0) const {
       std::stringstream ss;
-      ss << std::setw(indent) << " " << "OpPlusNodeNode\n";
+      ss << std::setw(indent) << " " << "OpPlusNode\n";
       if(leftExp)
         ss << leftExp->toString(indent + 1);
       if(rightExp)

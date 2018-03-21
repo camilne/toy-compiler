@@ -2,6 +2,7 @@
 #include "grammar.tab.h"
 #include "ast/SyntaxTree.ih"
 #include <string>
+#include <iostream>
 
 struct yy_buffer_state;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
@@ -240,5 +241,41 @@ TEST_CASE("operator precedence is respected", "[parser]") {
     REQUIRE(plusNode->getRightExp());
     auto minusNode = dynamic_cast<OpMinusNode*>(plusNode->getRightExp());
     REQUIRE(minusNode);
+  }
+
+  SECTION("op plus and op minus same precedence") {
+    static const std::string source = "1 + 5 - 3;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto plusNode = ast->getRoot()->getStatements()->getStatementAs<OpPlusNode*>();
+    REQUIRE(plusNode);
+    REQUIRE(plusNode->getLeftExp());
+    REQUIRE(plusNode->getRightExp());
+    auto minusNode = dynamic_cast<OpMinusNode*>(plusNode->getRightExp());
+    REQUIRE(minusNode);
+    REQUIRE(minusNode->getLeftExp());
+    REQUIRE(minusNode->getRightExp());
+  }
+
+  SECTION("op multiply and op divide same precedence") {
+    static const std::string source = "1 * 5 / 3;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto multiplyNode = ast->getRoot()->getStatements()->getStatementAs<OpMultiplyNode*>();
+    REQUIRE(multiplyNode);
+    REQUIRE(multiplyNode->getLeftExp());
+    REQUIRE(multiplyNode->getRightExp());
+    auto divideNode = dynamic_cast<OpDivideNode*>(multiplyNode->getRightExp());
+    REQUIRE(divideNode);
+    REQUIRE(divideNode->getLeftExp());
+    REQUIRE(divideNode->getRightExp());
   }
 }
