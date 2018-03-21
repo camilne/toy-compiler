@@ -116,6 +116,30 @@ TEST_CASE("parses statement", "[parser]") {
     REQUIRE(whileNode->getExpression());
     REQUIRE(whileNode->getStatements());
   }
+}
+
+TEST_CASE("parses expression", "[parser]") {
+  SECTION("unary minus") {
+    static const std::string source = "-5;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto minusNode = ast->getRoot()->getStatements()->getStatementAs<OpMinusNode*>();
+    REQUIRE(minusNode);
+
+    REQUIRE(minusNode->getLeftExp());
+    auto zeroNode = dynamic_cast<IntegerNode*>(minusNode->getLeftExp());
+    REQUIRE(zeroNode);
+    REQUIRE(zeroNode->getValue() == 0);
+
+    REQUIRE(minusNode->getRightExp());
+    auto valueNode = dynamic_cast<IntegerNode*>(minusNode->getRightExp());
+    REQUIRE(valueNode);
+    REQUIRE(valueNode->getValue() == 5);
+  }
 
   SECTION("op divide") {
     static const std::string source = "1 / 2;";
