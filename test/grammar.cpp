@@ -102,4 +102,18 @@ TEST_CASE("parses statement", "[parser]") {
     REQUIRE(whileNode->getExpression());
     REQUIRE(whileNode->getStatements() == nullptr);
   }
+
+  SECTION("while with statement") {
+    static const std::string source = "while(0){0;}";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto whileNode = ast->getRoot()->getStatements()->getStatementAs<WhileNode*>();
+    REQUIRE(whileNode);
+    REQUIRE(whileNode->getExpression());
+    REQUIRE(whileNode->getStatements());
+  }
 }
