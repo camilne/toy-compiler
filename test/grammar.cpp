@@ -116,4 +116,60 @@ TEST_CASE("parses statement", "[parser]") {
     REQUIRE(whileNode->getExpression());
     REQUIRE(whileNode->getStatements());
   }
+
+  SECTION("op divide") {
+    static const std::string source = "1 / 2;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto divideNode = ast->getRoot()->getStatements()->getStatementAs<OpDivideNode*>();
+    REQUIRE(divideNode);
+    REQUIRE(divideNode->getLeftExp());
+    REQUIRE(divideNode->getRightExp());
+  }
+
+  SECTION("op minus") {
+    static const std::string source = "1 - 2;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto minusNode = ast->getRoot()->getStatements()->getStatementAs<OpMinusNode*>();
+    REQUIRE(minusNode);
+    REQUIRE(minusNode->getLeftExp());
+    REQUIRE(minusNode->getRightExp());
+  }
+
+  SECTION("op multiply") {
+    static const std::string source = "1 * 2;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto multiplyNode = ast->getRoot()->getStatements()->getStatementAs<OpMultiplyNode*>();
+    REQUIRE(multiplyNode);
+    REQUIRE(multiplyNode->getLeftExp());
+    REQUIRE(multiplyNode->getRightExp());
+  }
+
+  SECTION("op plus") {
+    static const std::string source = "1 + 2;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto plusNode = ast->getRoot()->getStatements()->getStatementAs<OpPlusNode*>();
+    REQUIRE(plusNode);
+    REQUIRE(plusNode->getLeftExp());
+    REQUIRE(plusNode->getRightExp());
+  }
 }
