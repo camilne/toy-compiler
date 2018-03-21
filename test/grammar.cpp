@@ -278,4 +278,22 @@ TEST_CASE("operator precedence is respected", "[parser]") {
     REQUIRE(divideNode->getLeftExp());
     REQUIRE(divideNode->getRightExp());
   }
+
+  SECTION("op multiply higher than op plus") {
+    static const std::string source = "1 + 2 * 3;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto plusNode = ast->getRoot()->getStatements()->getStatementAs<OpPlusNode*>();
+    REQUIRE(plusNode);
+    REQUIRE(plusNode->getLeftExp());
+    REQUIRE(plusNode->getRightExp());
+    auto multiplyNode = dynamic_cast<OpMultiplyNode*>(plusNode->getRightExp());
+    REQUIRE(multiplyNode);
+    REQUIRE(multiplyNode->getLeftExp());
+    REQUIRE(multiplyNode->getRightExp());
+  }
 }
