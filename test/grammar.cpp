@@ -224,3 +224,21 @@ TEST_CASE("parses expression", "[parser]") {
     REQUIRE(integerNode->getValue() == 1);
   }
 }
+
+TEST_CASE("operator precedence is respected", "[parser]") {
+  SECTION("op with unary minus") {
+    static const std::string source = "1 + -5;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto plusNode = ast->getRoot()->getStatements()->getStatementAs<OpPlusNode*>();
+    REQUIRE(plusNode);
+    REQUIRE(plusNode->getLeftExp());
+    REQUIRE(plusNode->getRightExp());
+    auto minusNode = dynamic_cast<OpMinusNode*>(plusNode->getRightExp());
+    REQUIRE(minusNode);
+  }
+}
