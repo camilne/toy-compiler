@@ -172,4 +172,18 @@ TEST_CASE("parses statement", "[parser]") {
     REQUIRE(plusNode->getLeftExp());
     REQUIRE(plusNode->getRightExp());
   }
+
+  SECTION("assignment") {
+    static const std::string source = "a = 10;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto assignmentNode = ast->getRoot()->getStatements()->getStatementAs<AssignmentNode*>();
+    REQUIRE(assignmentNode);
+    REQUIRE(assignmentNode->getIdentifier());
+    REQUIRE(assignmentNode->getExpression());
+  }
 }
