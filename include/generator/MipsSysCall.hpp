@@ -5,33 +5,34 @@
 #include "generator/MipsUtil.hpp"
 #include <sstream>
 
-template <typename Arg>
-class MipsSysCall : public MipsStatement {
-public:
-    MipsSysCall(int func, Arg arg)
-        : func(func), arg(arg)
-    {}
+namespace mips {
+  template <typename Arg>
+  class MipsSysCall : public MipsStatement {
+  public:
+      MipsSysCall(int func, Arg arg)
+          : func(func), arg(arg)
+      {}
 
-    virtual std::string toCode() const override {
-        std::stringstream ss;
-        ss << "li $v0 " << func << "\n";
-        ss << loadArg(arg) << "\n";
-        ss << "syscall\n";
-        return ss.str();
-    }
+      virtual std::string toCode() const override {
+          std::stringstream ss;
+          ss << "li $v0 " << func << "\n";
+          ss << loadArg(arg) << "\n";
+          ss << "syscall\n";
+          return ss.str();
+      }
 
-private:
-    int func;
-    Arg arg;
+  private:
+      int func;
+      Arg arg;
 
-    std::string loadArg(int val) const {
-        return "li $a0 " + std::to_string(val);
-    }
+      std::string loadArg(int val) const {
+          return "li $a0 " + std::to_string(val);
+      }
 
-    std::string loadArg(std::string val) const {
-        return "add $a0 $zero " + val;
-    }
-
-};
+      std::string loadArg(std::string val) const {
+          return "add $a0 $zero " + val;
+      }
+  };
+}
 
 #endif

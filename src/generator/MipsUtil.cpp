@@ -1,9 +1,12 @@
 #include "generator/MipsUtil.hpp"
+#include "generator/MipsDefines.hpp"
 #include <iostream>
 #include <sstream>
 
+using namespace mips;
+
 // static
-std::string MipsUtil::toHex(word val) {
+std::string MipsUtil::toHex(uint32_t val) {
     std::stringstream ss;
     ss << std::hex << val;
     return ss.str();

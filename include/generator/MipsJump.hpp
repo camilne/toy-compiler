@@ -5,24 +5,26 @@
 #include "generator/MipsUtil.hpp"
 #include <sstream>
 
-class MipsJump : public MipsStatement {
-public:
-    explicit MipsJump(std::string name)
-        : name(name)
-    {}
+namespace mips{
+  class MipsJump : public MipsStatement {
+  public:
+      explicit MipsJump(std::string name)
+          : name(name)
+      {}
 
-    virtual std::string toCode() const override {
-        std::stringstream ss;
-        ss << "j " << name << "\n";
-        return ss.str();
-    }
+      virtual std::string toCode() const override {
+          std::stringstream ss;
+          ss << "j " << name << "\n";
+          return ss.str();
+      }
 
-    std::string getName() const {
-        return name;
-    }
+      std::string getName() const {
+          return name;
+      }
 
-private:
-    std::string name;
-};
+  private:
+      std::string name;
+  };
+}
 
 #endif

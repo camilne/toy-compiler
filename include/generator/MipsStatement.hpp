@@ -3,9 +3,11 @@
 
 #include <string>
 
-class MipsStatement {
-public:
-    virtual std::string toCode() const = 0;
-};
+namespace mips {
+  class MipsStatement {
+  public:
+      virtual std::string toCode() const = 0;
+  };
+}
 
 #endif

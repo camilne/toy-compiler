@@ -1,8 +1,11 @@
 #include "generator/MipsGenerator.hpp"
 #include "generator/MipsUtil.hpp"
+#include "generator/MipsOptimizer.hpp"
 #include "ast/SyntaxTreeNodes.ih"
 #include <sstream>
 #include <iostream>
+
+using namespace mips;
 
 // static
 const std::string MipsGenerator::IDENTIFIER_PREFIX = "__identifier__";
@@ -155,39 +158,13 @@ void MipsGenerator::generate(WhileNode& node) {
     add(std::make_shared<MipsLabel>(whileEnd));
 }
 
-void MipsGenerator::optimize() {
-    // Remove trailing pops if register is unused after
-    std::vector<int> popRegisters(NUM_REGISTERS);
-    for(auto& i : popRegisters)
-        i = 0;
-
-    for(auto it = mipsStatements.rbegin(); it != mipsStatements.rend(); ++it) {
-        std::shared_ptr<MipsStatement> obj = *it;
-        if(std::shared_ptr<MipsPop> pop = std::dynamic_pointer_cast<MipsPop>(obj)) {
-            if(pop->getRegister() < popRegisters.size()) {
-                if(!popRegisters[pop->getRegister()]) {
-                    mipsStatements.erase(std::next(it).base());
-                    --it;
-                } else {
-                    --popRegisters[pop->getRegister()];
-                }
-            }
-        } else if(std::shared_ptr<MipsPush> push = std::dynamic_pointer_cast<MipsPush>(obj)) {
-            if(push->getRegister() < popRegisters.size())
-                ++popRegisters[push->getRegister()];
-        } else if(std::shared_ptr<MipsOp> op = std::dynamic_pointer_cast<MipsOp>(obj)) {
-            if(op->getArg1Register() < popRegisters.size())
-                ++popRegisters[op->getArg1Register()];
-            if(op->getArg2Register() < popRegisters.size())
-                ++popRegisters[op->getArg2Register()];
-        }
-    }
-}
-
 const std::string& MipsGenerator::getCode() {
     static bool isCodeGenerated = false;
 
     if(!isCodeGenerated) {
+        MipsOptimizer optimizer(mipsStatements);
+        optimizer.optimize();
+
         std::stringstream ss;
         ss << ".data\n";
         for(std::pair<std::string, int> identifier : variables) {
@@ -253,43 +230,43 @@ int MipsGenerator::nextRegAndPush(int& reg, int begin, int end) {
 }
 
 int MipsGenerator::getTmpOffset(int off) {
-    return getRegOffset(tmpRegCounter, off, MipsUtil::TMP_BEGIN, MipsUtil::TMP_END);
+    return getRegOffset(tmpRegCounter, off, TMP_BEGIN, TMP_END);
 }
 
 int MipsGenerator::previousTmp() {
-    return previousReg(tmpRegCounter, MipsUtil::TMP_BEGIN, MipsUtil::TMP_END);
+    return previousReg(tmpRegCounter, TMP_BEGIN, TMP_END);
 }
 
 int MipsGenerator::previousTmpAndPop() {
-    return previousRegAndPop(tmpRegCounter, MipsUtil::TMP_BEGIN, MipsUtil::TMP_END);
+    return previousRegAndPop(tmpRegCounter, TMP_BEGIN, TMP_END);
 }
 
 int MipsGenerator::nextTmp() {
-    return nextReg(tmpRegCounter, MipsUtil::TMP_BEGIN, MipsUtil::TMP_END);
+    return nextReg(tmpRegCounter, TMP_BEGIN, TMP_END);
 }
 
 int MipsGenerator::nextTmpAndPush() {
-    return nextRegAndPush(tmpRegCounter, MipsUtil::TMP_BEGIN, MipsUtil::TMP_END);
+    return nextRegAndPush(tmpRegCounter, TMP_BEGIN, TMP_END);
 }
 
 int MipsGenerator::getSaveOffset(int off) {
-    return getRegOffset(saveRegCounter, off, MipsUtil::SAVE_BEGIN, MipsUtil::SAVE_END);
+    return getRegOffset(saveRegCounter, off, SAVE_BEGIN, SAVE_END);
 }
 
 int MipsGenerator::previousSave() {
-    return previousReg(saveRegCounter, MipsUtil::SAVE_BEGIN, MipsUtil::SAVE_END);
+    return previousReg(saveRegCounter, SAVE_BEGIN, SAVE_END);
 }
 
 int MipsGenerator::previousSaveAndPop() {
-    return previousRegAndPop(saveRegCounter, MipsUtil::SAVE_BEGIN, MipsUtil::SAVE_END);
+    return previousRegAndPop(saveRegCounter, SAVE_BEGIN, SAVE_END);
 }
 
 int MipsGenerator::nextSave() {
-    return nextReg(saveRegCounter, MipsUtil::SAVE_BEGIN, MipsUtil::SAVE_END);
+    return nextReg(saveRegCounter, SAVE_BEGIN, SAVE_END);
 }
 
 int MipsGenerator::nextSaveAndPush() {
-    return nextRegAndPush(saveRegCounter, MipsUtil::SAVE_BEGIN, MipsUtil::SAVE_END);
+    return nextRegAndPush(saveRegCounter, SAVE_BEGIN, SAVE_END);
 }
 
 void MipsGenerator::add(std::shared_ptr<MipsStatement>&& statement) {

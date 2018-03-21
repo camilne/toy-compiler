@@ -7,6 +7,8 @@
 #include <fstream>
 #include <stdio.h>
 
+using namespace mips;
+
 extern FILE* yyin;
 extern SyntaxTree* ast;
 
@@ -48,8 +50,6 @@ int main(int argc, char** argv) {
     else {
         MipsGenerator generator(verbose);
         ast->accept(generator);
-
-        generator.optimize();
 
         if(outputFile != "") {
             std::ofstream fout(outputFile);

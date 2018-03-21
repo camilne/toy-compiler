@@ -3,11 +3,13 @@
 
 #include "generator/MipsOp.hpp"
 
-class MipsAdd : public MipsOp {
-public:
-    MipsAdd(int dest, int arg1, int arg2)
-        : MipsOp("add", dest, arg1, arg2)
-    {}
-};
+namespace mips{
+  class MipsAdd : public MipsOp {
+  public:
+      MipsAdd(int dest, int arg1, int arg2)
+          : MipsOp("add", dest, arg1, arg2)
+      {}
+  };
+}
 
 #endif

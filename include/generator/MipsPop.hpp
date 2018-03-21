@@ -5,25 +5,27 @@
 #include "generator/MipsUtil.hpp"
 #include <sstream>
 
-class MipsPop : public MipsStatement {
-public:
-    explicit MipsPop(unsigned int reg)
-        : reg(reg)
-    {}
+namespace mips {
+  class MipsPop : public MipsStatement {
+  public:
+      explicit MipsPop(unsigned int reg)
+          : reg(reg)
+      {}
 
-    virtual std::string toCode() const override {
-        std::stringstream ss;
-        ss << "lw " << MipsUtil::toRegister(reg) << " 0($sp)\n";
-        ss << "addi $sp $sp 4\n";
-        return ss.str();
-    }
+      virtual std::string toCode() const override {
+          std::stringstream ss;
+          ss << "lw " << MipsUtil::toRegister(reg) << " 0($sp)\n";
+          ss << "addi $sp $sp 4\n";
+          return ss.str();
+      }
 
-    unsigned int getRegister() const {
-        return reg;
-    }
+      unsigned int getRegister() const {
+          return reg;
+      }
 
-private:
-    unsigned int reg;
-};
+  private:
+      unsigned int reg;
+  };
+}
 
 #endif

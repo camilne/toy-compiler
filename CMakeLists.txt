@@ -29,6 +29,7 @@ set(INCLUDE_FILES
   include/generator/MipsAdd.hpp
   include/generator/MipsBranchEqual.hpp
   include/generator/MipsComment.hpp
+  include/generator/MipsDefines.hpp
   include/generator/MipsDivide.hpp
   include/generator/MipsGenerator.hpp
   include/generator/MipsJump.hpp
@@ -39,6 +40,7 @@ set(INCLUDE_FILES
   include/generator/MipsMinus.hpp
   include/generator/MipsMultiply.hpp
   include/generator/MipsOp.hpp
+  include/generator/MipsOptimizer.hpp
   include/generator/MipsPop.hpp
   include/generator/MipsPush.hpp
   include/generator/MipsStatement.hpp
@@ -62,6 +64,7 @@ set(LIB_SOURCE_FILES
   src/ast/StatementsNode.cpp
   src/ast/WhileNode.cpp
   src/generator/MipsGenerator.cpp
+  src/generator/MipsOptimizer.cpp
   src/generator/MipsUtil.cpp
 )
 

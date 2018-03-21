@@ -5,24 +5,26 @@
 #include "generator/MipsUtil.hpp"
 #include <sstream>
 
-class MipsLabel : public MipsStatement {
-public:
-    explicit MipsLabel(std::string name)
-        : name(name)
-    {}
+namespace mips{
+  class MipsLabel : public MipsStatement {
+  public:
+      explicit MipsLabel(std::string name)
+          : name(name)
+      {}
 
-    virtual std::string toCode() const override {
-        std::stringstream ss;
-        ss << name << ":\n";
-        return ss.str();
-    }
+      virtual std::string toCode() const override {
+          std::stringstream ss;
+          ss << name << ":\n";
+          return ss.str();
+      }
 
-    std::string getName() const {
-        return name;
-    }
+      std::string getName() const {
+          return name;
+      }
 
-private:
-    std::string name;
-};
+  private:
+      std::string name;
+  };
+}
 
 #endif
