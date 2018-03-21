@@ -296,4 +296,22 @@ TEST_CASE("operator precedence is respected", "[parser]") {
     REQUIRE(multiplyNode->getLeftExp());
     REQUIRE(multiplyNode->getRightExp());
   }
+
+  SECTION("parentheses higher than all op") {
+    static const std::string source = "5 * (2 + 1);";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto multiplyNode = ast->getRoot()->getStatements()->getStatementAs<OpMultiplyNode*>();
+    REQUIRE(multiplyNode);
+    REQUIRE(multiplyNode->getLeftExp());
+    REQUIRE(multiplyNode->getRightExp());
+    auto plusNode = dynamic_cast<OpPlusNode*>(multiplyNode->getRightExp());
+    REQUIRE(plusNode);
+    REQUIRE(plusNode->getLeftExp());
+    REQUIRE(plusNode->getRightExp());
+  }
 }
