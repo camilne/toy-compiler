@@ -88,4 +88,18 @@ TEST_CASE("parses statement", "[parser]") {
     REQUIRE(identifierNode);
     REQUIRE(identifierNode->getName() == idName);
   }
+
+  SECTION("empty while") {
+    static const std::string source = "while(0){}";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto whileNode = ast->getRoot()->getStatements()->getStatementAs<WhileNode*>();
+    REQUIRE(whileNode);
+    REQUIRE(whileNode->getExpression());
+    REQUIRE(whileNode->getStatements() == nullptr);
+  }
 }
