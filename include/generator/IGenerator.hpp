@@ -29,12 +29,7 @@ public:
     virtual void generate(StatementsNode& node) = 0;
     virtual void generate(WhileNode&      node) = 0;
 
-    virtual const std::string& getCode() {
-        return code;
-    }
-
-protected:
-    std::string code;
+    virtual std::string getCode() = 0;
 };
 
 #endif

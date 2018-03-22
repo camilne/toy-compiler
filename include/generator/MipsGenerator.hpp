@@ -41,7 +41,7 @@ namespace mips {
       virtual void generate(StatementsNode& node) override;
       virtual void generate(WhileNode&      node) override;
 
-      virtual const std::string& getCode() override;
+      virtual std::string getCode() override;
 
   private:
       /// The prefix for generated identifiers.

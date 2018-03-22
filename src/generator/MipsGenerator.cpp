@@ -1,6 +1,6 @@
 #include "generator/MipsGenerator.hpp"
 #include "generator/MipsUtil.hpp"
-#include "generator/MipsOptimizer.hpp"
+#include "generator/MipsCodeGenerator.hpp"
 #include "ast/SyntaxTreeNodes.ih"
 #include <sstream>
 #include <iostream>
@@ -158,27 +158,9 @@ void MipsGenerator::generate(WhileNode& node) {
     add(std::make_shared<MipsLabel>(whileEnd));
 }
 
-const std::string& MipsGenerator::getCode() {
-    static bool isCodeGenerated = false;
-
-    if(!isCodeGenerated) {
-        MipsOptimizer optimizer(mipsStatements);
-        optimizer.optimize();
-
-        std::stringstream ss;
-        ss << ".data\n";
-        for(std::pair<std::string, int> identifier : variables) {
-            ss << identifier.first << ": .word 0\n";
-        }
-        ss << ".text\n";
-        for(std::shared_ptr<MipsStatement>& statement : mipsStatements) {
-            ss << statement->toCode();
-        }
-        code += ss.str();
-        isCodeGenerated = true;
-    }
-
-    return code;
+std::string MipsGenerator::getCode() {
+  MipsCodeGenerator codeGenerator(mipsStatements, variables);
+  return codeGenerator.getCode();
 }
 
 int MipsGenerator::getRegOffset(int& reg, int off, int begin, int end) {

@@ -28,6 +28,7 @@ set(INCLUDE_FILES
   include/generator/IGenerator.hpp
   include/generator/MipsAdd.hpp
   include/generator/MipsBranchEqual.hpp
+  include/generator/MipsCodeGenerator.hpp
   include/generator/MipsComment.hpp
   include/generator/MipsDefines.hpp
   include/generator/MipsDivide.hpp
@@ -63,6 +64,7 @@ set(LIB_SOURCE_FILES
   src/ast/PrintNode.cpp
   src/ast/StatementsNode.cpp
   src/ast/WhileNode.cpp
+  src/generator/MipsCodeGenerator.cpp
   src/generator/MipsGenerator.cpp
   src/generator/MipsOptimizer.cpp
   src/generator/MipsUtil.cpp
