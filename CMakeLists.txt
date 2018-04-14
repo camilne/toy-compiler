@@ -13,6 +13,7 @@ set(INCLUDE_FILES
   include/ast/AssignmentNode.hpp
   include/ast/IdentifierNode.hpp
   include/ast/IfNode.hpp
+  include/ast/IfElseNode.hpp
   include/ast/InitNode.hpp
   include/ast/IntegerNode.hpp
   include/ast/OpDivideNode.hpp
@@ -57,6 +58,7 @@ set(LIB_SOURCE_FILES
   src/ast/AssignmentNode.cpp
   src/ast/IdentifierNode.cpp
   src/ast/IfNode.cpp
+  src/ast/IfElseNode.cpp
   src/ast/InitNode.cpp
   src/ast/IntegerNode.cpp
   src/ast/OpDivideNode.cpp

@@ -30,7 +30,7 @@
 
 %token <STRING> IDENTIFIER INVALID_IDENTIFIER
 %token <INT> INTEGER
-%token PRINT_KEYWORD WHILE_KEYWORD IF_KEYWORD
+%token PRINT_KEYWORD WHILE_KEYWORD IF_KEYWORD ELSE_KEYWORD
 %token SEMICOLON LEFT_PAREN RIGHT_PAREN LEFT_BRACE RIGHT_BRACE UNKNOWN
 
 %precedence ASSIGNMENT
@@ -53,6 +53,8 @@ statement:
     PRINT_KEYWORD expression SEMICOLON          { $$ = new PrintNode($2); }
     | WHILE_KEYWORD LEFT_PAREN expression RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
                                                 { $$ = new WhileNode($3, $6); }
+    | IF_KEYWORD LEFT_PAREN expression RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE ELSE_KEYWORD LEFT_BRACE statements RIGHT_BRACE
+                                                { $$ = new IfElseNode($3, $6, $10); }
     | IF_KEYWORD LEFT_PAREN expression RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
                                                 { $$ = new IfNode($3, $6); }
     | expression SEMICOLON                      { $$ = $1; }

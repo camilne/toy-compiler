@@ -51,5 +51,7 @@ while(i) {
 }
 
 if(a - 10) {
-  print i + 5;
+  print 1;
+} else {
+  print 0; 
 }

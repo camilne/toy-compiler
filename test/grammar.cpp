@@ -91,6 +91,36 @@ TEST_CASE("parses statement", "[parser]") {
     REQUIRE(ifNode->getStatements());
   }
 
+  SECTION("empty else") {
+    static const std::string source = "if(0){}else{}";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto ifElseNode = ast->getRoot()->getStatements()->getStatementAs<IfElseNode*>();
+    REQUIRE(ifElseNode);
+    REQUIRE(ifElseNode->getExpression());
+    REQUIRE(ifElseNode->getStatements() == nullptr);
+    REQUIRE(ifElseNode->getElseStatements() == nullptr);
+  }
+
+  SECTION("if else with statement") {
+    static const std::string source = "if(0){0;}else{0;}";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto ifElseNode = ast->getRoot()->getStatements()->getStatementAs<IfElseNode*>();
+    REQUIRE(ifElseNode);
+    REQUIRE(ifElseNode->getExpression());
+    REQUIRE(ifElseNode->getStatements());
+    REQUIRE(ifElseNode->getElseStatements());
+  }
+
   SECTION("empty while") {
     static const std::string source = "while(0){}";
 

@@ -11,6 +11,7 @@ LINEFEED                \n
 PRINT_KEYWORD           print
 WHILE_KEYWORD           while
 IF_KEYWORD              if
+ELSE_KEYWORD            else
 LINE_COMMENT            "//".*
 BLOCK_COMMENT           "/*"[^*]*[*]+([^*/][^*]*[*]+)*[/]
 
@@ -22,6 +23,7 @@ BLOCK_COMMENT           "/*"[^*]*[*]+([^*/][^*]*[*]+)*[/]
 {PRINT_KEYWORD}                 return PRINT_KEYWORD;
 {WHILE_KEYWORD}                 return WHILE_KEYWORD;
 {IF_KEYWORD}                    return IF_KEYWORD;
+{ELSE_KEYWORD}                  return ELSE_KEYWORD;
 {INTEGER}                       { yylval.INT = atoi(yytext); return INTEGER; }
 {INVALID_IDENTIFIER}            { yylval.STRING = strdup(yytext); return INVALID_IDENTIFIER; }
 {IDENTIFIER}                    { yylval.STRING = strdup(yytext); return IDENTIFIER; }

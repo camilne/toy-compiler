@@ -68,6 +68,29 @@ void MipsGenerator::generate(IfNode& node) {
     add(std::make_shared<MipsLabel>(ifEnd));
 }
 
+void MipsGenerator::generate(IfElseNode& node) {
+    add(std::make_shared<MipsComment>(node.toCode()));
+
+    if(!node.getExpression()) {
+        add(std::make_shared<MipsComment>("No expression in if"));
+        return;
+    }
+
+    std::string ifId = uniqueId();
+    std::string ifElse = LABEL_PREFIX + "if_else_" + ifId;
+    std::string ifEnd = LABEL_PREFIX + "if_end_" + ifId;
+
+    node.getExpression()->accept(*this);
+    add(std::make_shared<MipsBranchEqual>(tmpRegCounter, 0, ifElse));
+    if(node.getStatements())
+        node.getStatements()->accept(*this);
+    add(std::make_shared<MipsJump>(ifEnd));
+    add(std::make_shared<MipsLabel>(ifElse));
+    if(node.getElseStatements())
+      node.getElseStatements()->accept(*this);
+    add(std::make_shared<MipsLabel>(ifEnd));
+}
+
 void MipsGenerator::generate(InitNode& node) {
     add(std::make_shared<MipsComment>(node.toCode()));
 

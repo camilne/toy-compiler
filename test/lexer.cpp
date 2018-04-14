@@ -190,6 +190,15 @@ TEST_CASE("tokenizes keywords", "[lexer]") {
     REQUIRE(tokens[0] == yytokentype::IF_KEYWORD);
   }
 
+  SECTION("else") {
+    static const std::string source = "else";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::ELSE_KEYWORD);
+  }
+
   SECTION("print") {
     static const std::string source = "print";
 

@@ -32,6 +32,7 @@ namespace mips {
       virtual void generate(AssignmentNode& node) override;
       virtual void generate(IdentifierNode& node) override;
       virtual void generate(IfNode&         node) override;
+      virtual void generate(IfElseNode&     node) override;
       virtual void generate(InitNode&       node) override;
       virtual void generate(IntegerNode&    node) override;
       virtual void generate(OpDivideNode&   node) override;
