@@ -181,6 +181,15 @@ TEST_CASE("ignores comments", "[lexer]") {
 }
 
 TEST_CASE("tokenizes keywords", "[lexer]") {
+  SECTION("if") {
+    static const std::string source = "if";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::IF_KEYWORD);
+  }
+
   SECTION("print") {
     static const std::string source = "print";
 

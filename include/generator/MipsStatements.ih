@@ -1,5 +1,6 @@
 #include "generator/MipsAdd.hpp"
 #include "generator/MipsBranchEqual.hpp"
+#include "generator/MipsBranchNotEqual.hpp"
 #include "generator/MipsComment.hpp"
 #include "generator/MipsDivide.hpp"
 #include "generator/MipsJump.hpp"

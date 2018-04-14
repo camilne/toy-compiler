@@ -49,3 +49,7 @@ while(i) {
     b = b + tmp;
     i = i - 1;
 }
+
+if(a - 10) {
+  print i + 5;
+}

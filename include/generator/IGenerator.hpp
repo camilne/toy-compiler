@@ -5,6 +5,7 @@
 
 class AssignmentNode;
 class IdentifierNode;
+class IfNode;
 class InitNode;
 class IntegerNode;
 class OpDivideNode;
@@ -19,6 +20,7 @@ class IGenerator {
 public:
     virtual void generate(AssignmentNode& node) = 0;
     virtual void generate(IdentifierNode& node) = 0;
+    virtual void generate(IfNode&         node) = 0;
     virtual void generate(InitNode&       node) = 0;
     virtual void generate(IntegerNode&    node) = 0;
     virtual void generate(OpDivideNode&   node) = 0;
