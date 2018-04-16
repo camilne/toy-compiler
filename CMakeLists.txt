@@ -18,6 +18,7 @@ set(INCLUDE_FILES
   include/ast/IntegerNode.hpp
   include/ast/OpDivideNode.hpp
   include/ast/OpEqualityNode.hpp
+  include/ast/OpGreaterThanEqualNode.hpp
   include/ast/OpGreaterThanNode.hpp
   include/ast/OpInequalityNode.hpp
   include/ast/OpLessThanEqualNode.hpp
@@ -73,6 +74,7 @@ set(LIB_SOURCE_FILES
   src/ast/IntegerNode.cpp
   src/ast/OpDivideNode.cpp
   src/ast/OpEqualityNode.cpp
+  src/ast/OpGreaterThanEqualNode.cpp
   src/ast/OpGreaterThanNode.cpp
   src/ast/OpInequalityNode.cpp
   src/ast/OpLessThanEqualNode.cpp

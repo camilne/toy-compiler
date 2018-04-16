@@ -11,6 +11,7 @@ class InitNode;
 class IntegerNode;
 class OpDivideNode;
 class OpEqualityNode;
+class OpGreaterThanEqualNode;
 class OpGreaterThanNode;
 class OpInequalityNode;
 class OpLessThanEqualNode;
@@ -33,6 +34,7 @@ public:
     virtual void generate(IntegerNode&    node) = 0;
     virtual void generate(OpDivideNode&   node) = 0;
     virtual void generate(OpEqualityNode& node) = 0;
+    virtual void generate(OpGreaterThanEqualNode& node) = 0;
     virtual void generate(OpGreaterThanNode& node) = 0;
     virtual void generate(OpInequalityNode& node) = 0;
     virtual void generate(OpLessThanEqualNode& node) = 0;

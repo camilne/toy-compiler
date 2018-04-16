@@ -6,6 +6,7 @@
 #include "ast/IntegerNode.hpp"
 #include "ast/OpDivideNode.hpp"
 #include "ast/OpEqualityNode.hpp"
+#include "ast/OpGreaterThanEqualNode.hpp"
 #include "ast/OpGreaterThanNode.hpp"
 #include "ast/OpInequalityNode.hpp"
 #include "ast/OpLessThanEqualNode.hpp"
