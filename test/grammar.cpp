@@ -298,6 +298,20 @@ TEST_CASE("parses expression", "[parser]") {
     REQUIRE(inequalityNode->getRightExp());
   }
 
+  SECTION("less than") {
+    static const std::string source = "5 < 10;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto lessThanNode = ast->getRoot()->getStatements()->getStatementAs<OpLessThanNode*>();
+    REQUIRE(lessThanNode);
+    REQUIRE(lessThanNode->getLeftExp());
+    REQUIRE(lessThanNode->getRightExp());
+  }
+
   SECTION("single parentheses are transparent") {
     static const std::string source = "(1);";
 

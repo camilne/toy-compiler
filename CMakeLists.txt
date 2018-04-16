@@ -19,6 +19,7 @@ set(INCLUDE_FILES
   include/ast/OpDivideNode.hpp
   include/ast/OpEqualityNode.hpp
   include/ast/OpInequalityNode.hpp
+  include/ast/OpLessThanNode.hpp
   include/ast/OpMinusNode.hpp
   include/ast/OpMultiplyNode.hpp
   include/ast/OpPlusNode.hpp
@@ -41,6 +42,7 @@ set(INCLUDE_FILES
   include/generator/MipsInequality.hpp
   include/generator/MipsJump.hpp
   include/generator/MipsLabel.hpp
+  include/generator/MipsLessThan.hpp
   include/generator/MipsLoad.hpp
   include/generator/MipsLoadAddress.hpp
   include/generator/MipsLoadImmediate.hpp
@@ -68,6 +70,7 @@ set(LIB_SOURCE_FILES
   src/ast/OpDivideNode.cpp
   src/ast/OpEqualityNode.cpp
   src/ast/OpInequalityNode.cpp
+  src/ast/OpLessThanNode.cpp
   src/ast/OpMinusNode.cpp
   src/ast/OpMultiplyNode.cpp
   src/ast/OpPlusNode.cpp

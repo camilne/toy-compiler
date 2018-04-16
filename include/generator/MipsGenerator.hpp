@@ -38,6 +38,7 @@ namespace mips {
       virtual void generate(OpDivideNode&   node) override;
       virtual void generate(OpEqualityNode& node) override;
       virtual void generate(OpInequalityNode& node) override;
+      virtual void generate(OpLessThanNode& node) override;
       virtual void generate(OpMinusNode&    node) override;
       virtual void generate(OpMultiplyNode& node) override;
       virtual void generate(OpPlusNode&     node) override;
