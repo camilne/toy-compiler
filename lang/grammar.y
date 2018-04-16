@@ -34,6 +34,8 @@
 %token SEMICOLON LEFT_PAREN RIGHT_PAREN LEFT_BRACE RIGHT_BRACE UNKNOWN
 
 %precedence ASSIGNMENT
+%right NOT_EQUALITY EQUALITY
+%right LESS_THAN LESS_THAN_EQUAL GREATER_THAN GREATER_THAN_EQUAL
 %right OP_PLUS OP_MINUS
 %right OP_MUL OP_DIV
 %precedence NEG
@@ -62,6 +64,7 @@ statement:
 expression:
       OP_MINUS expression %prec NEG             { $$ = new OpMinusNode(new IntegerNode(0), $2); }
     | IDENTIFIER ASSIGNMENT expression          { $$ = new AssignmentNode(new IdentifierNode($1), $3); }
+    | expression EQUALITY expression            { $$ = new OpEqualityNode($1, $3); }
     | expression OP_DIV expression              { $$ = new OpDivideNode($1, $3); }
     | expression OP_MUL expression              { $$ = new OpMultiplyNode($1, $3); }
     | expression OP_PLUS expression             { $$ = new OpPlusNode($1, $3); }

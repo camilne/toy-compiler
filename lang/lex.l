@@ -37,6 +37,12 @@ BLOCK_COMMENT           "/*"[^*]*[*]+([^*/][^*]*[*]+)*[/]
 ")"                             return RIGHT_PAREN;
 "{"                             return LEFT_BRACE;
 "}"                             return RIGHT_BRACE;
+"<"                             return LESS_THAN;
+"<="                            return LESS_THAN_EQUAL;
+">"                             return GREATER_THAN;
+">="                            return GREATER_THAN_EQUAL;
+"!="                            return NOT_EQUALITY;
+"=="                            return EQUALITY;
 "="                             return ASSIGNMENT;
 .                               { yylval.STRING = strdup(yytext); return UNKNOWN; }
 

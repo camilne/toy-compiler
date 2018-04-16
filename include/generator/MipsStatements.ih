@@ -3,6 +3,7 @@
 #include "generator/MipsBranchNotEqual.hpp"
 #include "generator/MipsComment.hpp"
 #include "generator/MipsDivide.hpp"
+#include "generator/MipsEquality.hpp"
 #include "generator/MipsJump.hpp"
 #include "generator/MipsLabel.hpp"
 #include "generator/MipsLoad.hpp"

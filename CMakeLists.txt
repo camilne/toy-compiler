@@ -17,6 +17,7 @@ set(INCLUDE_FILES
   include/ast/InitNode.hpp
   include/ast/IntegerNode.hpp
   include/ast/OpDivideNode.hpp
+  include/ast/OpEqualityNode.hpp
   include/ast/OpMinusNode.hpp
   include/ast/OpMultiplyNode.hpp
   include/ast/OpPlusNode.hpp
@@ -34,6 +35,7 @@ set(INCLUDE_FILES
   include/generator/MipsComment.hpp
   include/generator/MipsDefines.hpp
   include/generator/MipsDivide.hpp
+  include/generator/MipsEquality.hpp
   include/generator/MipsGenerator.hpp
   include/generator/MipsJump.hpp
   include/generator/MipsLabel.hpp
@@ -62,6 +64,7 @@ set(LIB_SOURCE_FILES
   src/ast/InitNode.cpp
   src/ast/IntegerNode.cpp
   src/ast/OpDivideNode.cpp
+  src/ast/OpEqualityNode.cpp
   src/ast/OpMinusNode.cpp
   src/ast/OpMultiplyNode.cpp
   src/ast/OpPlusNode.cpp

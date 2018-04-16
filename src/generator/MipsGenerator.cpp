@@ -118,6 +118,18 @@ void MipsGenerator::generate(OpDivideNode& node) {
     previousTmpAndPop();
 }
 
+void MipsGenerator::generate(OpEqualityNode& node) {
+    if(node.getLeftExp())
+        node.getLeftExp()->accept(*this);
+    if(node.getRightExp())
+        node.getRightExp()->accept(*this);
+
+    add(std::make_shared<MipsComment>(node.toCode()));
+
+    addOpForCurrentTmp<MipsEquality>();
+    previousTmpAndPop();
+}
+
 void MipsGenerator::generate(OpMinusNode& node) {
     if(node.getLeftExp())
         node.getLeftExp()->accept(*this);

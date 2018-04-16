@@ -50,8 +50,17 @@ while(i) {
     i = i - 1;
 }
 
-if(a - 10) {
+print 444444444;
+
+z = 5;
+if(z == 5) {
   print 1;
 } else {
-  print 0; 
+  print 0;
+}
+
+if(z - 1 == 1 + 2) {
+  print 1;
+} else {
+  print 0;
 }

@@ -270,6 +270,20 @@ TEST_CASE("parses expression", "[parser]") {
     REQUIRE(assignmentNode->getExpression());
   }
 
+  SECTION("equality") {
+    static const std::string source = "5 == 10;";
+
+    auto ast = parseString(source);
+
+    REQUIRE(ast);
+    REQUIRE(ast->getRoot());
+    REQUIRE(ast->getRoot()->getStatements());
+    auto equalityNode = ast->getRoot()->getStatements()->getStatementAs<OpEqualityNode*>();
+    REQUIRE(equalityNode);
+    REQUIRE(equalityNode->getLeftExp());
+    REQUIRE(equalityNode->getRightExp());
+  }
+
   SECTION("single parentheses are transparent") {
     static const std::string source = "(1);";
 
