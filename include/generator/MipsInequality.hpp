@@ -1,14 +1,14 @@
-#ifndef MIPS_EQUALITY_HPP
-#define MIPS_EQUALITY_HPP
+#ifndef MIPS_INEQUALITY_HPP
+#define MIPS_INEQUALITY_HPP
 
 #include "generator/MipsStatement.hpp"
 #include "generator/MipsUtil.hpp"
 #include <sstream>
 
 namespace mips{
-  class MipsEquality : public MipsStatement {
+  class MipsInequality : public MipsStatement {
   public:
-    MipsEquality(int dest, int arg1, int arg2)
+    MipsInequality(int dest, int arg1, int arg2)
       : dest(dest), arg1(arg1), arg2(arg2)
     {}
 
@@ -22,10 +22,6 @@ namespace mips{
       ss << "sltu " << MipsUtil::toRegister(dest) << " ";
       ss << MipsUtil::toRegister(0) << " ";
       ss << MipsUtil::toRegister(dest) << "\n";
-      // Invert 1->0 or 0->1
-      ss << "xori " << MipsUtil::toRegister(dest) << " ";
-      ss << MipsUtil::toRegister(dest) << " ";
-      ss << "1\n";
       return ss.str();
     }
 

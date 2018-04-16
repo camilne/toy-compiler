@@ -59,7 +59,7 @@ if(z == 5) {
   print 0;
 }
 
-if(z - 1 == 1 + 2) {
+if(z - 1 != z + 1) {
   print 1;
 } else {
   print 0;

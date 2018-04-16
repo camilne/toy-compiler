@@ -317,6 +317,15 @@ TEST_CASE("tokenizes symbols", "[lexer]") {
     REQUIRE(tokens.size() == 1);
     REQUIRE(tokens[0] == yytokentype::EQUALITY);
   }
+
+  SECTION("inequality") {
+    static const std::string source = "!=";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::NOT_EQUALITY);
+  }
 }
 
 TEST_CASE("tokenizes unknown characters", "[lexer]") {
