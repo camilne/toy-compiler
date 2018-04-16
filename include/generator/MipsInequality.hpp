@@ -18,10 +18,6 @@ namespace mips{
       ss << "xor " << MipsUtil::toRegister(dest) << " ";
       ss << MipsUtil::toRegister(arg1) << " ";
       ss << MipsUtil::toRegister(arg2) << "\n";
-      // Set to 1 if different
-      ss << "sltu " << MipsUtil::toRegister(dest) << " ";
-      ss << MipsUtil::toRegister(0) << " ";
-      ss << MipsUtil::toRegister(dest) << "\n";
       return ss.str();
     }
 
