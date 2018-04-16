@@ -13,6 +13,7 @@
 #include "generator/MipsLoadImmediate.hpp"
 #include "generator/MipsMinus.hpp"
 #include "generator/MipsMultiply.hpp"
+#include "generator/MipsOr.hpp"
 #include "generator/MipsPop.hpp"
 #include "generator/MipsPush.hpp"
 #include "generator/MipsStatement.hpp"

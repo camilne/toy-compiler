@@ -68,6 +68,7 @@ expression:
     | expression GREATER_THAN expression        { $$ = new OpGreaterThanNode($1, $3); }
     | expression NOT_EQUALITY expression        { $$ = new OpInequalityNode($1, $3); }
     | expression LESS_THAN expression           { $$ = new OpLessThanNode($1, $3); }
+    | expression LESS_THAN_EQUAL expression     { $$ = new OpLessThanEqualNode($1, $3); }
     | expression OP_DIV expression              { $$ = new OpDivideNode($1, $3); }
     | expression OP_MUL expression              { $$ = new OpMultiplyNode($1, $3); }
     | expression OP_PLUS expression             { $$ = new OpPlusNode($1, $3); }

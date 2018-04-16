@@ -20,9 +20,11 @@ set(INCLUDE_FILES
   include/ast/OpEqualityNode.hpp
   include/ast/OpGreaterThanNode.hpp
   include/ast/OpInequalityNode.hpp
+  include/ast/OpLessThanEqualNode.hpp
   include/ast/OpLessThanNode.hpp
   include/ast/OpMinusNode.hpp
   include/ast/OpMultiplyNode.hpp
+  include/ast/OpOrNode.hpp
   include/ast/OpPlusNode.hpp
   include/ast/PrintNode.hpp
   include/ast/StatementsNode.hpp
@@ -51,6 +53,7 @@ set(INCLUDE_FILES
   include/generator/MipsMultiply.hpp
   include/generator/MipsOp.hpp
   include/generator/MipsOptimizer.hpp
+  include/generator/MipsOr.hpp
   include/generator/MipsPop.hpp
   include/generator/MipsPush.hpp
   include/generator/MipsStatement.hpp
@@ -72,9 +75,11 @@ set(LIB_SOURCE_FILES
   src/ast/OpEqualityNode.cpp
   src/ast/OpGreaterThanNode.cpp
   src/ast/OpInequalityNode.cpp
+  src/ast/OpLessThanEqualNode.cpp
   src/ast/OpLessThanNode.cpp
   src/ast/OpMinusNode.cpp
   src/ast/OpMultiplyNode.cpp
+  src/ast/OpOrNode.cpp
   src/ast/OpPlusNode.cpp
   src/ast/PrintNode.cpp
   src/ast/StatementsNode.cpp
