@@ -335,6 +335,15 @@ TEST_CASE("tokenizes symbols", "[lexer]") {
     REQUIRE(tokens.size() == 1);
     REQUIRE(tokens[0] == yytokentype::LESS_THAN);
   }
+
+  SECTION("greater than") {
+    static const std::string source = ">";
+
+    std::vector<int> tokens = lexString(source);
+
+    REQUIRE(tokens.size() == 1);
+    REQUIRE(tokens[0] == yytokentype::GREATER_THAN);
+  }
 }
 
 TEST_CASE("tokenizes unknown characters", "[lexer]") {

@@ -106,18 +106,6 @@ void MipsGenerator::generate(IntegerNode& node) {
     add(std::make_shared<MipsLoadImmediate>(reg, node.getValue()));
 }
 
-void MipsGenerator::generate(OpLessThanNode& node) {
-    if(node.getLeftExp())
-        node.getLeftExp()->accept(*this);
-    if(node.getRightExp())
-        node.getRightExp()->accept(*this);
-
-    add(std::make_shared<MipsComment>(node.toCode()));
-
-    addOpForCurrentTmp<MipsLessThan>();
-    previousTmpAndPop();
-}
-
 void MipsGenerator::generate(OpDivideNode& node) {
     if(node.getLeftExp())
         node.getLeftExp()->accept(*this);
@@ -142,6 +130,18 @@ void MipsGenerator::generate(OpEqualityNode& node) {
     previousTmpAndPop();
 }
 
+void MipsGenerator::generate(OpGreaterThanNode& node) {
+    if(node.getLeftExp())
+        node.getLeftExp()->accept(*this);
+    if(node.getRightExp())
+        node.getRightExp()->accept(*this);
+
+    add(std::make_shared<MipsComment>(node.toCode()));
+
+    add(std::make_shared<MipsLessThan>(getTmpOffset(-1), getTmpOffset(0), getTmpOffset(-1)));
+    previousTmpAndPop();
+}
+
 void MipsGenerator::generate(OpInequalityNode& node) {
     if(node.getLeftExp())
         node.getLeftExp()->accept(*this);
@@ -151,6 +151,18 @@ void MipsGenerator::generate(OpInequalityNode& node) {
     add(std::make_shared<MipsComment>(node.toCode()));
 
     addOpForCurrentTmp<MipsInequality>();
+    previousTmpAndPop();
+}
+
+void MipsGenerator::generate(OpLessThanNode& node) {
+    if(node.getLeftExp())
+        node.getLeftExp()->accept(*this);
+    if(node.getRightExp())
+        node.getRightExp()->accept(*this);
+
+    add(std::make_shared<MipsComment>(node.toCode()));
+
+    addOpForCurrentTmp<MipsLessThan>();
     previousTmpAndPop();
 }
 
